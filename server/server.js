@@ -1,10 +1,17 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const PORT = 3000;
 
 // requiring mongoose
 const mongoose = require('mongoose');
+
+// allow cross-origin requests
+const corsOptions = {
+  origin: "http://localhost:8080"   // or should this be 3000?
+};
+app.use(cors(corsOptions));
 
 // requiring routers here
 const apiRouter = require('./routes/api.js');

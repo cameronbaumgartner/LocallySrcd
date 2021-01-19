@@ -17,6 +17,7 @@ module.exports = {
       '/favorites/**': 'http://localhost:3000',
     },
     hot: true,
+    headers: { 'Access-Control-Allow-Origin': '*' },
   },
   module: {
     rules: [
@@ -31,7 +32,6 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        // 🐼
         test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
