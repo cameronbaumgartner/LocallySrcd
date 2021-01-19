@@ -49,7 +49,7 @@ const userController = {
           }
           if (result) {
             res.locals.username = foundUser.username;
-            res.locals.prefLocations = foundUser.prefLocations;
+            res.locals.favorites = foundUser.favorites;
             return next();
           }
           return res.status(418).send('Permission denied');

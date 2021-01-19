@@ -1,8 +1,7 @@
 const path = require('path');
-// importing express here 👇
 const express = require('express');
 const app = express();
-const PORT = 3000; // this is your port 👈
+const PORT = 3000; 
 
 // requiring mongoose
 const mongoose = require('mongoose');
@@ -11,10 +10,10 @@ const mongoose = require('mongoose');
 const apiRouter = require('./routes/api.js');
 const signupRouter = require('./routes/signup.js');
 const loginRouter = require('./routes/login.js');
+const favRouter = require('./routes/favs.js');
 
-// please don't attack my database 😤🥳🤪
 const MongoURI =
-  'mongodb+srv://shahDBA:shahDBA123@clusterfudge.lrsuc.mongodb.net/locally?retryWrites=true&w=majority';
+  'mongodb+srv://cameronhbg:rGBxRb6Wm7gPkImZ@cluster0.i6kz1.mongodb.net/LocallySRCD?retryWrites=true&w=majority';
 
 mongoose.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
@@ -38,6 +37,7 @@ app.use((req, res, next) => {
 app.use('/api', apiRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
+app.use('/favs', favRouter);
 
 /*** MAIN PAGE ***/
 
