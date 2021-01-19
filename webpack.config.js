@@ -17,18 +17,22 @@ module.exports = {
       '/favorites/**': 'http://localhost:3000',
     },
     hot: true,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    headers: { 
+      'Access-Control-Allow-Origin': '*' 
+    },
   },
   module: {
     rules: [
       {
         test: /.(js|jsx)$/,
-        use: {
+        enforce: 'pre',
+        use: [{
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
+        'source-map-loader'],
         exclude: /node_modules/,
       },
       {

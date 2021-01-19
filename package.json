@@ -26,6 +26,7 @@
     "react-router-dom": "^5.2.0",
     "sass": "^1.32.4",
     "sass-loader": "^10.1.1",
+    "source-map-loader": "^2.0.0",
     "style-loader": "^2.0.0",
     "yelp-fusion": "^3.0.0"
   },
