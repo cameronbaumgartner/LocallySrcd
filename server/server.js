@@ -17,6 +17,7 @@ app.use(cors(corsOptions));
 const apiRouter = require('./routes/api.js');
 const signupRouter = require('./routes/signup.js');
 const loginRouter = require('./routes/login.js');
+const favRouter = require('./routes/favs.js');
 
 const MongoURI =
   'mongodb+srv://cameronhbg:rGBxRb6Wm7gPkImZ@cluster0.i6kz1.mongodb.net/LocallySRCD?retryWrites=true&w=majority';
@@ -34,8 +35,8 @@ app.use((req, res, next) => {
   console.log(`
   *** FLOW METHOD ***\n
   URL: ${req.url}\n
-  BODY: ${req.body}\n
-  METHOD: ${req.method}\n`);
+  BODY: `, req.body,
+  `\n METHOD: ${req.method}\n`);
   return next();
 });
 
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 app.use('/api', apiRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
+app.use('/favs', favRouter);
 
 /*** MAIN PAGE ***/
 
