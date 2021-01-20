@@ -10,10 +10,10 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
       <div className="login">
         <form>
           <input className="loginput" id ="userName" type="text"
-          placeholder="username"
+          placeholder="username" required
           /> 
           <input className="loginput" id="passWord" type="password"
-            placeholder="password" 
+            placeholder="password" required
           /> 
           <button id="logbutton" type="button" onClick={() => {
             const username = document.getElementById('userName').value;
@@ -38,12 +38,12 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
         <form>
           <div>
           <input className="signupinput" id ="userName" type="text"
-          placeholder="username"
+          placeholder="username" required
           />
           </div>
           <div>
           <input className="signupinput" id="passWord" type="password"
-            placeholder="password" 
+            placeholder="password" required
           /> 
           </div>
           </form>
