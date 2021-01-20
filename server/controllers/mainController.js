@@ -7,6 +7,7 @@ const { ClosedStore, Review, Rating } = require('../models/storeModel.js');
 
 const mainController = {};
 
+// get stores by search term
 mainController.getResults = (req, res, next) => {
   const { term, longitude, latitude } = req.body;
 
@@ -50,6 +51,31 @@ mainController.getResults = (req, res, next) => {
     });
 };
 
+mainController.getReviews = (req, res, next) => {
+  console.log('Getting reviews for storeID ')
+
+  return next();
+}
+
+mainController.addReview = (req, res, next) => {
+  console.log('Getting reviews for storeID ')
+
+  return next();
+}
+
+mainController.getRatings = (req, res, next) => {
+  console.log('Getting reviews for storeID ')
+
+  return next();
+}
+
+mainController.addRating = (req, res, next) => {
+  console.log('Getting reviews for storeID ')
+
+  return next();
+}
+
+// closed stores
 mainController.getClosedStores = (req, res, next) => {
   ClosedStore.find({}, (err, closedStores) => {
     if (err) return next(`Error in getClosedStores middleware: ${err}`);
