@@ -44,7 +44,7 @@ const userController = {
 
         bcrypt.compare(password, foundUser.password, (err, result) => {
           if (err) {
-            console.log('ERR at bcrypt.compare: ', err);
+            console.warn('ERR at bcrypt.compare: ', err);
             return next(err);
           }
           if (result) {
@@ -61,28 +61,6 @@ const userController = {
     );
   },
 
-  // execute if user wants to update their favorites in the database
-  /*
-  updateUser(req, res, next) {
-    const { username, password, favorites } = req.body;
-    User.findOneAndUpdate(
-      {
-        username: username,
-        password: password,
-        favorites: favorites,
-      },
-      {
-        favorites: favorites,
-      },
-      { upsert: true, new: true },
-      (err, userObj) => {
-        if (err) return next(err);
-        res.locals.updatedUser = userObj;
-        return next(err);
-      }
-    );
-  },
-  */
 
   // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
@@ -92,7 +70,7 @@ const userController = {
 
     User.findOne({ _id: userID }, (err, user) => {
       if (err) {
-        console.log('ERR at getFavorites: ', err);
+        console.warn('ERR at getFavorites: ', err);
         return next(err);
       }
 
@@ -109,7 +87,7 @@ const userController = {
       res.locals.favorites.push(storeID);
     }
     catch(err) {
-      console.log('error pushing new storeID into array: ', err);
+      console.warn('error pushing new storeID into array: ', err);
     }
 
     return next();
@@ -117,19 +95,14 @@ const userController = {
 
   removeFavorite(req, res, next) {
     console.log('removeFavorite: ', req.body.storeID, ' from ', res.locals.favorites);
-    /*
-    const copy = res.locals.favorites.slice();
-    for (let i = 0; i < copy.length; i++) {
-      if (copy[i] === req.body.storeID) {
-        copy.splice(i, 1);
-        break;
-      }
-    }
-    
-    res.locals.favorites = copy;
-    */
 
-    res.locals.favorites.splice(res.locals.favorites.indexOf(req.body.storeID), 1);
+    try {
+      res.locals.favorites.splice(res.locals.favorites.indexOf(req.body.storeID), 1);
+    }
+    catch (err) {
+      console.warn('error removing storeID from array: ', err);
+    }
+
     // console.log('after removing: ', res.locals.favorites);
     return next();
   },
@@ -146,7 +119,7 @@ const userController = {
       { upsert: true, new: true }, 
       (err, user) => {
         if (err) {
-          console.log('ERR at addFavorite: ', err); 
+          console.log('ERR at updateFavorites: ', err); 
           return next(err);
         }
 
