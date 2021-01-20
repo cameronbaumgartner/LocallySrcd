@@ -131,8 +131,9 @@ class App extends Component {
   }
   
   // event handler when log out button is clicked
-  // does this do anything?
-  logoutHandler() { 
+  logoutHandler() {
+    fetch('/logout', { method: 'POST' });
+
     this.setState((prevState) => {
       const newState = { ...prevState }
       newState.user = null;
