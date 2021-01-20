@@ -4,13 +4,12 @@ const User = require('../models/userModel');
 // create the user
 const userController = {
   createUser(req, res, next) {
-    const { username, password, prefLocations } = req.body;
+    const { username, password, favorites } = req.body;
 
     User.create(
       {
         username: username,
-        password: password,
-        prefLocations: prefLocations,
+        favorites: favorites,
       },
       (err, newUser) => {
         if (err)
@@ -18,9 +17,9 @@ const userController = {
             log: 'Error user already exists',
             message: err,
           });
-        const { username, prefLocations } = newUser;
+        const { username, favorites } = newUser;
         res.locals.username = username;
-        res.locals.prefLocations = prefLocations;
+        res.locals.favorites = favorites;
         console.log('res.locals.user -->', res.locals);
         return next();
       }
@@ -60,42 +59,84 @@ const userController = {
 
   // execute if user wants to update their preferred locations in the database
   updateUser(req, res, next) {
-    const { username, password, prefLocations } = req.body;
+    const { username, password, favorites } = req.body;
     User.findOneAndUpdate(
       {
         username: username,
         password: password,
-        prefLocations: prefLocations,
+        favorites: favorites,
       },
       {
-        prefLocations: prefLocations,
+        favorites: favorites,
       },
       { upsert: true, new: true },
       (err, userObj) => {
-        if (err) return err;
+        if (err) return next(err);
         res.locals.updatedUser = userObj;
-        return next();
+        return next(err);
       }
     );
   },
 
+  // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
     // temporary sample user, change
     const userID = '60074ab9707e6f29cecd1487';
+    // const userID = req.cookies.userID;   //  TODO
 
     User.findOne({ _id: userID }, (err, user) => {
-      if (err) return err;
-      res.locals.favorites = user.prefLocations;
+      if (err) {
+        console.log('ERR at getFavorites: ', err);
+        return next(err);
+      }
+      res.locals.favorites = user.favorites;
       return next();
     });
   },
 
-  addFavorite(req, res, next) {
+  // add the store faved on the frontend to the array of favorites
+  addFavorites(req, res, next) {
+    console.log('addFavorites');
+    const { storeID } = req.body;   // assuming the favorite store to add is on the req body at a key calle fav
+
+    res.locals.favorites.push(fav);
     return next();
   },
 
   removeFavorite(req, res, next) {
+    console.log('removeFavorite');
+    const copy = res.locals.favorites.slice();
+    for (let i = 0; i < copy.length; i++) {
+      if (copy[i] === req.body.storeID) {
+        copy.splice(i, 1);
+        break;
+      }
+    }
+
+    res.locals.favorites = copy;
     return next();
+  },
+
+  // update user record with the modified array
+  updateFavorites(req, res, next) {
+    // temporary sample user, change
+    const userID = '60074ab9707e6f29cecd1487';
+    const favorites = res.locals.favorites;    // TODO: what is this key called on the req.body?
+
+    User.findOneAndUpdate(
+      { _id: userID }, 
+      { favorites }, 
+      { upsert: true, new: true }, 
+      (err, user) => {
+        if (err) {
+          console.log('ERR at addFavorite: ', err); 
+          return next(err);
+        }
+
+        res.locals.favorites = user.favorites;
+        return next();
+      }
+    );
   }
 };
 
