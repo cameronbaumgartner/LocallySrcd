@@ -26,19 +26,19 @@ router.get('/reviews',
 
 router.post('/reviews',
   mainController.addReview,
-  mainConrtoller.getReviews,
+  mainController.getReviews,
   (req, res) => res.status(200).json(res.locals.reviews)
 );
 
-router.get('/ratings',
-  mainController.getRatings,
-  (req, res) => res.status(200).json(res.locals.ratings)
-);
+// router.get('/ratings',
+//   mainController.getRatings,
+//   (req, res) => res.status(200).json(res.locals.ratings)
+// );
 
-router.post('/ratings',
-  mainController.addRating,
-  mainController.getRatings,
-  (req, res) => res.status(200).json(res.locals.ratings)
-);
+// router.post('/ratings',
+//   mainController.addRating,
+//   mainController.getRatings,
+//   (req, res) => res.status(200).json(res.locals.ratings)
+// );
 
 module.exports = router;

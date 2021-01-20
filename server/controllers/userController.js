@@ -1,16 +1,12 @@
-const bcrypt = require('bcrypt'); // 🧟‍♂️ 🧟‍♀️
+const bcrypt = require('bcrypt'); 
 const User = require('../models/userModel');
 
 // create the user
 const userController = {
   createUser(req, res, next) {
-    const { username, password, favorites } = req.body;
+    const { username, password } = req.body;
 
-    User.create(
-      {
-        username,
-        favorites,
-      },
+    User.create({ username, password },
       (err, newUser) => {
         if (err)
           return next({
@@ -31,10 +27,7 @@ const userController = {
     console.log('in getUser', req.body);
     const { username, password } = req.body;
 
-    User.findOne(
-      {
-        username: username,
-      },
+    User.findOne({ username },
       (err, foundUser) => {
         if (err)
           return next({

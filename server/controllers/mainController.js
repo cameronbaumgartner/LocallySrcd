@@ -3,11 +3,12 @@ const yelp = require('yelp-fusion');
 const client = yelp.client(
   'C875dNRjWAzLaQgmC7nd_wO97JFWpg6PuDdI9mfVsru_cOTvyoouijdnEAQwW2rnVUJ5lELwswChXgQaOJpSNpLK4tK6Jr_Gi1xRtp3dWA2UZT7B7xYP5zDBmEYDYHYx'
 );
-const { ClosedStore, Review, Rating } = require('../models/storeModel.js');
+const { ClosedStore, Review } = require('../models/storeModel.js');
+const User = require('../models/userModel');
 
 const mainController = {};
-const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.userID
-const user = { _id: userID, name: 'shelby'}; // TODO: replace with subdoc queried from users collection
+const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.SSID
+const user = { _id: userID, username: 'shelby'}; // TODO: replace with username queried from users collection
 
 // get stores by search term
 mainController.getResults = (req, res, next) => {
@@ -55,9 +56,10 @@ mainController.getResults = (req, res, next) => {
     });
 };
 
+// reviews and ratings
 mainController.getReviews = (req, res, next) => {
   const { storeID } = req.query;
-  console.log('Getting reviews for storeID ', storeID);
+  console.log('Getting reviews for storeID ', storeID, typeof storeID);
 
   Review.find({ storeID }, (err, reviews) => {
     if(err) {
@@ -65,18 +67,42 @@ mainController.getReviews = (req, res, next) => {
       return next(err);
     }
 
-    console.log('Got reviews: ', reviews);
-    res.locals.reviews = reviews;
-    return next();
+    console.log('Reviews before iterating: ', reviews);
+    
+    // using promise.all to iterate synchronously through asynchronous queries on each review in the array
+    function getUsernames() {
+      const promises = [];
+      for (let i = 0; i < reviews.length; i++) {
+        console.log(reviews[i].userID);
+        promises.push(
+          User.findById(reviews[i].userID, (err, user) => {
+            if (err) {
+              console.warn('ERROR at getReviews forEach: ', err);
+              return next(err);
+            }
+            // reviews[i].username = user.username;
+            console.log('Found user: ', user);
+          })
+        );
+      }
+      return Promise.all(promises);
+    }
+    
+    getUsernames().then(() => {
+      console.log('Reviews after iterating: ', reviews);
+      res.locals.reviews = reviews;
+      return next();
+    });
+
   });
 }
 
 mainController.addReview = (req, res, next) => {
   const { storeID } = req.query;
-  const { text } = req.body;
+  const { text, rating } = req.body;
   console.log('Adding review to storeID ', storeID, ': ', text);
 
-  Review.create({ user, storeID, text }, (err, doc) => {
+  Review.create({ user, storeID, text, rating }, (err, doc) => {
     if (err) {
       console.warn('ERROR at addReview: ', err);
       return next(err);
@@ -87,6 +113,7 @@ mainController.addReview = (req, res, next) => {
   });
 }
 
+/*
 mainController.getRatings = (req, res, next) => {
   const { storeID } = req.query;
   console.log('Getting ratings for storeID ', storeID);
@@ -118,6 +145,7 @@ mainController.addRating = (req, res, next) => {
     return next();
   });
 }
+*/
 
 // closed stores
 mainController.getClosedStores = (req, res, next) => {

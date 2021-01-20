@@ -13,7 +13,7 @@ const closedStoreSchema = new Schema({
 const ClosedStore = mongoose.model('closedStore', closedStoreSchema);
 
 const reviewSchema = new Schema({
-  user_id: {
+  userID: {
     type: Schema.Types.ObjectId,
     refs: 'user',
     required: true,
@@ -25,11 +25,18 @@ const reviewSchema = new Schema({
   text: {
     type: String,
     required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
   }
 });
 
 const Review = mongoose.model('review', reviewSchema);
 
+/*
 const ratingSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
@@ -49,9 +56,10 @@ const ratingSchema = new Schema({
 });
 
 const Rating = mongoose.model('rating', ratingSchema);
+*/
 
 module.exports = {
   ClosedStore,
   Review,
-  Rating
-}
+  // Rating
+};
