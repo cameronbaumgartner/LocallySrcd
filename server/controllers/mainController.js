@@ -6,6 +6,8 @@ const client = yelp.client(
 const { ClosedStore, Review, Rating } = require('../models/storeModel.js');
 
 const mainController = {};
+const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.userID
+const user = { _id: userID, name: 'shelby'}; // TODO: replace with subdoc queried from users collection
 
 // get stores by search term
 mainController.getResults = (req, res, next) => {
@@ -54,27 +56,67 @@ mainController.getResults = (req, res, next) => {
 };
 
 mainController.getReviews = (req, res, next) => {
-  console.log('Getting reviews for storeID ')
+  const { storeID } = req.query;
+  console.log('Getting reviews for storeID ', storeID);
 
-  return next();
+  Review.find({ storeID }, (err, reviews) => {
+    if(err) {
+      console.warn('ERROR at getReviews: ', err);
+      return next(err);
+    }
+
+    console.log('Got reviews: ', reviews);
+    res.locals.reviews = reviews;
+    return next();
+  });
 }
 
 mainController.addReview = (req, res, next) => {
-  console.log('Getting reviews for storeID ')
+  const { storeID } = req.query;
+  const { text } = req.body;
+  console.log('Adding review to storeID ', storeID, ': ', text);
 
-  return next();
+  Review.create({ user, storeID, text }, (err, doc) => {
+    if (err) {
+      console.warn('ERROR at addReview: ', err);
+      return next(err);
+    }
+
+    console.log('New review added to db: ', doc);
+    return next();
+  });
 }
 
 mainController.getRatings = (req, res, next) => {
-  console.log('Getting reviews for storeID ')
+  const { storeID } = req.query;
+  console.log('Getting ratings for storeID ', storeID);
 
-  return next();
+  Rating.find({ storeID }, (err, ratings) => {
+    if(err) {
+      console.warn('ERROR at getRatings: ', err);
+      return next(err);
+    }
+
+    console.log('Got ratings: ', ratings);
+    res.locals.ratings = ratings;
+    return next();
+  });
 }
 
 mainController.addRating = (req, res, next) => {
-  console.log('Getting reviews for storeID ')
+  const { storeID } = req.query;
+  const { rating } = req.body;
+  console.log('Adding rating to storeID ', storeID, ': ', rating);
 
-  return next();
+  Rating.create({ user, storeID, rating }, (err, doc) => {
+    if (err) {
+      console.warn('ERROR at addRating: ', err);
+      return next(err);
+    }
+
+    console.log('New rating added to db: ', doc);
+    return next();
+  });
 }
 
 // closed stores

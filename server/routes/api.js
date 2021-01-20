@@ -26,6 +26,7 @@ router.get('/reviews',
 
 router.post('/reviews',
   mainController.addReview,
+  mainConrtoller.getReviews,
   (req, res) => res.status(200).json(res.locals.reviews)
 );
 
@@ -36,7 +37,8 @@ router.get('/ratings',
 
 router.post('/ratings',
   mainController.addRating,
-  (req, res) => res.status(200).json(res.locals.reviews)
+  mainController.getRatings,
+  (req, res) => res.status(200).json(res.locals.ratings)
 );
 
 module.exports = router;

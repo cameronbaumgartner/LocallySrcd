@@ -8,8 +8,8 @@ const userController = {
 
     User.create(
       {
-        username: username,
-        favorites: favorites,
+        username,
+        favorites,
       },
       (err, newUser) => {
         if (err)
