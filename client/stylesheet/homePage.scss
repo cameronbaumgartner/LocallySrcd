@@ -14,6 +14,35 @@
   }
 }
 
+#noLogInput {
+  margin-top: 6px;
+  font-family: 'Fredoka One';
+  font-size: 12px;
+  color: rgb(214, 45, 87);
+  padding-left: 20%;
+}
+
+#noSignInput {
+  margin-top: 6px;
+  font-family: 'Fredoka One';
+  font-size: 12px;
+  color: rgb(214, 45, 87);
+  text-align: center;
+  padding-left: 20px;
+}
+
+#catDrop {
+  font-family: 'Fredoka One';
+  font-size: 18px;
+  color: rgb(104, 99, 99);
+  text-align: center;
+}
+
+#catDrop:hover {
+  cursor: pointer;
+  color: darken(rgb(104, 99, 99), 20%);
+}
+
 
 .TopCateBox {
   display: inline-flex;
@@ -36,12 +65,17 @@
   }
 }
 
-
 .TopCateButton:hover {
   box-shadow: 0 3px 2px 0 rgba(102, 101, 101, 0.24), 0 3px 2px 0 rgba(102, 101, 101, 0.24);
+  cursor: pointer;
+}
+
+.TopCateButton:active {
+  box-shadow: none;
+  outline:none;
 }
 
 .TopCateButton:focus {
-  outline: none;
+  outline:none;
 }
 
