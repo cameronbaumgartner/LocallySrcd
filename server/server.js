@@ -1,24 +1,30 @@
 const path = require('path');
-// importing express here 👇
 const express = require('express');
 const app = express();
-const PORT = 3000; // this is your port 👈
+const cors = require('cors');
+const PORT = 3000;
 
 // requiring mongoose
 const mongoose = require('mongoose');
+
+// allow cross-origin requests
+const corsOptions = {
+  origin: "http://localhost:8080"   // or should this be 3000?
+};
+app.use(cors(corsOptions));
 
 // requiring routers here
 const apiRouter = require('./routes/api.js');
 const signupRouter = require('./routes/signup.js');
 const loginRouter = require('./routes/login.js');
+const favRouter = require('./routes/favs.js');
 
-// please don't attack my database 😤🥳🤪
 const MongoURI =
   'mongodb+srv://cameronhbg:rGBxRb6Wm7gPkImZ@cluster0.i6kz1.mongodb.net/LocallySRCD?retryWrites=true&w=majority';
 
 mongoose.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
-  console.log('connected to our DB!');
+  console.log('connected to DB');
 });
 
 // parsing any JSON body we get first
@@ -29,8 +35,8 @@ app.use((req, res, next) => {
   console.log(`
   *** FLOW METHOD ***\n
   URL: ${req.url}\n
-  BODY: ${req.body}\n
-  METHOD: ${req.method}\n`);
+  BODY: `, req.body,
+  `\n METHOD: ${req.method}\n`);
   return next();
 });
 
@@ -38,6 +44,7 @@ app.use((req, res, next) => {
 app.use('/api', apiRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
+app.use('/favs', favRouter);
 
 /*** MAIN PAGE ***/
 

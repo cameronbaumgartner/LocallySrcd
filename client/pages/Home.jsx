@@ -6,7 +6,7 @@ import GoogleApiWrapper from '../containers/MapContainer.jsx';
 
 
 const Home = (props) => {
-  const { results, preferredLocations, closedLocations, closedStoreId } = props.state;
+  const { results, favorites, closedLocations, closedStoreId } = props.state;
   const { searchButtonHandler, catBtnHandler, reportClosed } = props;
 
   return (
@@ -20,7 +20,7 @@ const Home = (props) => {
       <ResultsContainer
         results={results}
         closedStoreId={closedStoreId}
-        preferredLocations={preferredLocations}
+        favorites={favorites}
         closedLocations={closedLocations}
         reportClosed={reportClosed}
       />
