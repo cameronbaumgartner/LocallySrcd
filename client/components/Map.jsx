@@ -25,8 +25,8 @@ export default class CurrentLocation extends React.Component{
     CurrentLocation.defaultProps = {
       zoom: 14,
       initialCenter: {
-        lat: -1.2884,
-        lng: 36.8233
+        lat: 40.719200,
+        lng: -74.005820
       },
       centerAroundCurrentLocation: false,
       visible: true
@@ -120,7 +120,7 @@ export default class CurrentLocation extends React.Component{
 
     return (
       <div>
-        <div style={style} ref="map">
+        <div id="map" style={style} ref="map">
           Loading map...
         </div>
         {this.renderChildren()}

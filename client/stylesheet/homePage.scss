@@ -16,9 +16,14 @@
 }
 
 #map{
-  height:fit-content;
-  width:fit-content;
 }
+
+#mapBox{
+  height: 500px;
+  width: 500px;
+}
+
+
 #noLogInput {
   margin-top: 6px;
   font-family: 'Fredoka One';

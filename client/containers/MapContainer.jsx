@@ -8,13 +8,15 @@ export class MapContainer extends Component {
     showingInfoWindow: false,  // Hides or shows the InfoWindow
     activeMarker: {},          // Shows the active marker upon click
     selectedPlace: {} 
-  }
+  };
+
   onMarkerClick = (props, marker, e) =>
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     });
+
   onClose = props => {
     if (this.state.showingInfoWindow) {
       this.setState({
@@ -26,7 +28,7 @@ export class MapContainer extends Component {
 
   render(){
     return (
-      <div id="map">
+      <div id="mapBox">
         <CurrentLocation
           centerAroundCurrentLocation
           google={this.props.google}
