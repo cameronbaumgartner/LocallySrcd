@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+import GoogleMapReact from  'google-map-react';
 import APIKey from '../secrets.js';
 import CurrentLocation from '../components/Map.jsx'
 
