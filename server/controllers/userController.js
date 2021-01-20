@@ -57,7 +57,8 @@ const userController = {
     );
   },
 
-  // execute if user wants to update their preferred locations in the database
+  // execute if user wants to update their favorites in the database
+  /*
   updateUser(req, res, next) {
     const { username, password, favorites } = req.body;
     User.findOneAndUpdate(
@@ -77,6 +78,7 @@ const userController = {
       }
     );
   },
+  */
 
   // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
@@ -120,7 +122,7 @@ const userController = {
   // update user record with the modified array
   updateFavorites(req, res, next) {
     // temporary sample user, change
-    const userID = '60074ab9707e6f29cecd1487';
+    const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.userID
     const favorites = res.locals.favorites;    // TODO: what is this key called on the req.body?
 
     User.findOneAndUpdate(
