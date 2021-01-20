@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  favorites: { type: Array }
+  prefLocations: { type: Array }
 });
 
 userSchema.pre('save', function (next) {

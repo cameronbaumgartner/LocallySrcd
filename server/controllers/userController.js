@@ -78,6 +78,25 @@ const userController = {
       }
     );
   },
+
+  getFavorites(req, res, next) {
+    // temporary sample user, change
+    const userID = '60074ab9707e6f29cecd1487';
+
+    User.findOne({ _id: userID }, (err, user) => {
+      if (err) return err;
+      res.locals.favorites = user.prefLocations;
+      return next();
+    });
+  },
+
+  addFavorite(req, res, next) {
+    return next();
+  },
+
+  removeFavorite(req, res, next) {
+    return next();
+  }
 };
 
 module.exports = userController;
