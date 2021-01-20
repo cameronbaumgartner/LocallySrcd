@@ -6,7 +6,7 @@ const client = yelp.client(
 const ClosedStores = require('../models/closedStoreModel.js');
 
 const mainController = {};
-// sup Anson and Daniel. Check this out 😮‍💨 lol. fart emoji haha 💩 lol
+
 mainController.getResults = (req, res, next) => {
   const { term, longitude, latitude } = req.body;
 
@@ -19,6 +19,8 @@ mainController.getResults = (req, res, next) => {
     .then((response) => {
       // use reduce to take response object's array of businesses and reduce it down to 10 results, removing unneeded key-value pairs
       let counter = 0;
+
+      // IDEA: Change reduce to a map, and grab just the first 10 (or 100) indices of the fetched array.
       const reducedResults = response.jsonBody.businesses.reduce(
         (acc, cv, idx) => {
           // checking if the results arr of obj's id matches the closed store's arr of obj's id
@@ -57,7 +59,7 @@ mainController.getClosedStores = (req, res, next) => {
     // this is an arr of objs which has closed store id's
     for (let obj of closedStores) {
       let innerId = obj.storeId;
-      // the actual id values are the keys, bools are the vals
+      //State updated:  {user: undefined, isLoggedIn: true, preferredLocations: undefined, closedLocations: undefined, fetchTerm: undefined, …} the actual id values are the keys, bools are the vals
       closedStoreIdCache[innerId] = true;
     }
     res.locals.closedStoresList = closedStoreIdCache;

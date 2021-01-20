@@ -12,7 +12,7 @@ class App extends Component {
     this.state = {
       user: null, // will reassigned as the user object sent back from server after client signs up/logins // {firstName: string, lastName: username: string}
       isLoggedIn: false,
-      preferredLocations: null, // preferredLocations: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
+      preferredLocations: null, // preferredLocations: user's location as fetched from db. object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
       closedLocations: null, // closed locations: object with keys as the placeIDs and values of true; -> will be created when client receives results back from fetch request
       fetchTerm: '',
       signUpPop: false,
