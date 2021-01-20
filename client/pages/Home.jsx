@@ -4,7 +4,8 @@ import SearchContainer from '../containers/SearchContainer.jsx';
 import ResultsContainer from '../containers/ResultsContainer.jsx';
 
 const Home = (props) => {
-  const { results, preferredLocations, closedLocations, closedStoreId, user, userID } = props.state;
+
+  const { results, favorites, closedLocations, closedStoreId, user, userID } = props.state;
   const { searchButtonHandler, catBtnHandler, reportClosed, favorited, unFavorited } = props;
 
   return (
@@ -19,7 +20,7 @@ const Home = (props) => {
         unFavorited={unFavorited}
         results={results}
         closedStoreId={closedStoreId}
-        preferredLocations={preferredLocations}
+        favorites={favorites}
         closedLocations={closedLocations}
         reportClosed={reportClosed}
         user={user}

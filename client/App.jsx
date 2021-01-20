@@ -10,10 +10,10 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      user: null,
-      userID: null, // will reassigned as the user object sent back from server after client signs up/logins // {firstName: string, lastName: username: string}
+      user: '', // will reassigned as the user object sent back from server after client signs up/logins // 'username'
       isLoggedIn: false,
-      preferredLocations: ['4Do8Sfex1EvWES2jpa1VCA', 'RfxOtJ4SQmEeVX_XjFLWUQ'], // preferredLocations: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
+      userID: '', // will be replaced by sessions
+      favorites: ['4Do8Sfex1EvWES2jpa1VCA', 'RfxOtJ4SQmEeVX_XjFLWUQ'], // favorites: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
       closedLocations: null, // closed locations: object with keys as the placeIDs and values of true; -> will be created when client receives results back from fetch request
       fetchTerm: '',
       signUpPop: false,
@@ -123,6 +123,7 @@ class App extends Component {
           const newState = { ...prevState };
           newState.user = data.username
           newState.isLoggedIn = true;
+          newState.favorites = data.favorites;
           return newState;
         });
       })
@@ -135,7 +136,7 @@ class App extends Component {
     this.setState((prevState) => {
       const newState = { ...prevState }
       newState.user = null;
-      newState.preferredLocations = null;
+      newState.favorites = [];
       newState.isLoggedIn = false;
       newState.results = null;
       return newState;
@@ -171,7 +172,7 @@ class App extends Component {
         newState.user = data.username
         newState.isLoggedIn = true;
         newState.signUpPop = false;
-        newState.preferredLocations = data.prefLocations;
+        newState.favorites = data.favorites;
         return newState;
       });
     })

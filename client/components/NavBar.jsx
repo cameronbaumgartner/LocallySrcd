@@ -9,6 +9,7 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
   const [noLogInput, setNoLogInput] = useState('');
 
   const pressEnterLogin = (e) => {
+    e.preventDefault();
     if (e.key === 'Enter') {
       submitLogin();
     }
@@ -26,6 +27,7 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
   }
 
   const pressEnterSignUp = (e) => {
+    e.preventDefault();
     if (e.key === 'Enter') {
       submitSignUp();
     }
