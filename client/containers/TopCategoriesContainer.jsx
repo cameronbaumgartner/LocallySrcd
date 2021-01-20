@@ -15,8 +15,19 @@ class TopCategoriesContainer extends Component {
         ['Home Life', 'plants'],
         ['Clothing', 'fashion'],
       ],
+      hidden: true,
     };
+
   }
+
+  updateHidden() {
+    this.setState((prevState) => {
+      const newState = { ...prevState };
+      newState.hidden ? newState.hidden = false : newState.hidden = true;
+      return newState;
+    });
+  }
+
   render() {
     // map thru array of categories to create a category button for each one with category button
     const buttonCategories = this.state.categories.map((category, idx) => (
@@ -28,12 +39,21 @@ class TopCategoriesContainer extends Component {
       />
     ));
 
-
-    return (
-      <div className="TopCateBox">
-        {buttonCategories}
-      </div>
-  )}
+    if (this.state.hidden) {
+      return (
+        <p id="catDrop" onClick={() => {this.updateHidden()}}>Click here to explore top store categories! ▼</p>
+      )
+    } else {
+      return (
+        <div>
+          <p id="catDrop" onClick={() => {this.updateHidden()}}>Hide categories ▲</p>
+          <div className="TopCateBox">
+            {buttonCategories}
+          </div>
+        </div>
+      )
+    }
+  }
 }
 
 export default TopCategoriesContainer;
