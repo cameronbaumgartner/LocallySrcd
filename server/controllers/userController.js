@@ -44,13 +44,17 @@ const userController = {
 
         bcrypt.compare(password, foundUser.password, (err, result) => {
           if (err) {
-            return 'error';
+            console.log('ERR at bcrypt.compare: ', err);
+            return next(err);
           }
           if (result) {
             res.locals.username = foundUser.username;
             res.locals.favorites = foundUser.favorites;
             return next();
           }
+
+          // else if result is null (?)
+          console.log('Unsuccessful login attempt. Result of bycrpt.compare: ', result);
           return res.status(418).send('Permission denied');
         });
       }
@@ -91,6 +95,7 @@ const userController = {
         console.log('ERR at getFavorites: ', err);
         return next(err);
       }
+
       res.locals.favorites = user.favorites;
       return next();
     });
@@ -98,15 +103,21 @@ const userController = {
 
   // add the store faved on the frontend to the array of favorites
   addFavorites(req, res, next) {
-    console.log('addFavorites');
-    const { storeID } = req.body;   // assuming the favorite store to add is on the req body at a key calle fav
+    let { storeID } = req.body;  
 
-    res.locals.favorites.push(fav);
+    try {
+      res.locals.favorites.push(storeID);
+    }
+    catch(err) {
+      console.log('error pushing new storeID into array: ', err);
+    }
+
     return next();
   },
 
   removeFavorite(req, res, next) {
-    console.log('removeFavorite');
+    console.log('removeFavorite: ', req.body.storeID, ' from ', res.locals.favorites);
+    /*
     const copy = res.locals.favorites.slice();
     for (let i = 0; i < copy.length; i++) {
       if (copy[i] === req.body.storeID) {
@@ -114,8 +125,12 @@ const userController = {
         break;
       }
     }
-
+    
     res.locals.favorites = copy;
+    */
+
+    res.locals.favorites.splice(res.locals.favorites.indexOf(req.body.storeID), 1);
+    // console.log('after removing: ', res.locals.favorites);
     return next();
   },
 
@@ -123,7 +138,7 @@ const userController = {
   updateFavorites(req, res, next) {
     // temporary sample user, change
     const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.userID
-    const favorites = res.locals.favorites;    // TODO: what is this key called on the req.body?
+    const favorites = res.locals.favorites; 
 
     User.findOneAndUpdate(
       { _id: userID }, 

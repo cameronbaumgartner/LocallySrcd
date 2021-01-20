@@ -28,8 +28,8 @@ app.use((req, res, next) => {
   console.log(`
   *** FLOW METHOD ***\n
   URL: ${req.url}\n
-  BODY: ${req.body}\n
-  METHOD: ${req.method}\n`);
+  BODY: `, req.body,
+  `\n METHOD: ${req.method}\n`);
   return next();
 });
 
