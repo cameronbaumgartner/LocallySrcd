@@ -1,6 +1,9 @@
 #secrets
 client/secrets.js
 
+#deprecated map version
+containers/MapContainer.jsx
+
 # Logs
 logs
 *.log

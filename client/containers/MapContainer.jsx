@@ -4,6 +4,9 @@ import GoogleMapReact from  'google-map-react';
 import APIKey from '../secrets.js';
 import CurrentLocation from '../components/Map.jsx'
 
+//NOT CURRENTLY IN DOM, I'VE JUST LEFT IT IN FOR MY OWN REFERENCE
+
+
 export class MapContainer extends Component {
   state = {
     showingInfoWindow: false,  // Hides or shows the InfoWindow
