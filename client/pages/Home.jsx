@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import TopCategoriesContainer from '../containers/TopCategoriesContainer.jsx';
 import SearchContainer from '../containers/SearchContainer.jsx';
 import ResultsContainer from '../containers/ResultsContainer.jsx';
+import GoogleApiWrapper from '../containers/MapContainer.jsx';
+
 
 const Home = (props) => {
   const { results, preferredLocations, closedLocations, closedStoreId } = props.state;
@@ -12,6 +14,7 @@ const Home = (props) => {
       <p> Practice kindness. Check in with one another. 
         <br></br>
         Amplify your support. Shop locally! </p>
+      <GoogleApiWrapper/>
       <TopCategoriesContainer catBtnHandler={catBtnHandler} />
       <SearchContainer searchButtonHandler={searchButtonHandler} />
       <ResultsContainer

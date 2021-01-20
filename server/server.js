@@ -14,7 +14,7 @@ const loginRouter = require('./routes/login.js');
 
 // please don't attack my database 😤🥳🤪
 const MongoURI =
-  'mongodb+srv://shahDBA:shahDBA123@clusterfudge.lrsuc.mongodb.net/locally?retryWrites=true&w=majority';
+  'mongodb+srv://cameronhbg:rGBxRb6Wm7gPkImZ@cluster0.i6kz1.mongodb.net/LocallySRCD?retryWrites=true&w=majority';
 
 mongoose.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
