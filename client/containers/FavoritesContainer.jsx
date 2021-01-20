@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 
 
-// will display all of the user's preferred locations
+// will display all of the user's favorites
 class Favorites extends Component {
   constructor(props) {
     super(props);

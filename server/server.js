@@ -1,12 +1,8 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-<<<<<<< HEAD
-const PORT = 3000; 
-=======
 const cors = require('cors');
 const PORT = 3000;
->>>>>>> cf0b2b1ef8db73660b4830c80a5aece6b29005a2
 
 // requiring mongoose
 const mongoose = require('mongoose');
@@ -39,8 +35,8 @@ app.use((req, res, next) => {
   console.log(`
   *** FLOW METHOD ***\n
   URL: ${req.url}\n
-  BODY: ${req.body}\n
-  METHOD: ${req.method}\n`);
+  BODY: `, req.body,
+  `\n METHOD: ${req.method}\n`);
   return next();
 });
 
