@@ -10,9 +10,10 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      user: null, // will reassigned as the user object sent back from server after client signs up/logins // {firstName: string, lastName: username: string}
+      user: null,
+      userID: null, // will reassigned as the user object sent back from server after client signs up/logins // {firstName: string, lastName: username: string}
       isLoggedIn: false,
-      preferredLocations: null, // preferredLocations: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
+      preferredLocations: ['4Do8Sfex1EvWES2jpa1VCA', 'RfxOtJ4SQmEeVX_XjFLWUQ'], // preferredLocations: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
       closedLocations: null, // closed locations: object with keys as the placeIDs and values of true; -> will be created when client receives results back from fetch request
       fetchTerm: '',
       signUpPop: false,
@@ -30,7 +31,8 @@ class App extends Component {
     this.signUpButtonHandler = this.signUpButtonHandler.bind(this);
     this.createUser = this.createUser.bind(this);
     this.reportClosed = this.reportClosed.bind(this);
-
+    this.favorited = this.favorited.bind(this);
+    this.unFavorited = this.unFavorited.bind(this);
   }
 
   updateUserCoordinates(latitude, longitude) {
@@ -91,6 +93,7 @@ class App extends Component {
       .then((data) => {
         this.setState((prevState) => {
           const newState = { ...prevState };
+          console.log('api data:', data);
           newState.results = data.results;
           newState.closedLocations = data.closedLocations;
           newState.fetchTerm = data.term;
@@ -120,7 +123,6 @@ class App extends Component {
           const newState = { ...prevState };
           newState.user = data.username
           newState.isLoggedIn = true;
-          newState.preferredLocations = data.prefLocations;
           return newState;
         });
       })
@@ -128,6 +130,7 @@ class App extends Component {
   }
   
   // event handler when log out button is clicked
+  // does this do anything?
   logoutHandler() { 
     this.setState((prevState) => {
       const newState = { ...prevState }
@@ -139,10 +142,12 @@ class App extends Component {
     });
   }
  
+  // does this do anything?
   signUpButtonHandler() {
     this.setState((prevState) => {
       const newState = { ...prevState };
-      newState.signUpPop = true;
+      if (newState.signUpPop) newState.signUpPop = false;
+      else newState.signUpPop = true;
       return newState;
     });
   }
@@ -201,18 +206,81 @@ class App extends Component {
       .catch((err) => console.log(err));
   }
 
+  favorited(user, userID, storeID) {
+    console.log('user:', user, ' storeID:', storeID);
+    fetch('/favs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+      body: JSON.stringify({
+        storeID: storeID
+      }),
+    })
+    .then((data) => data.json())
+    .then((data) => {
+      this.setState((prevState) => {
+        const newState = { ...prevState };
+        newState.preferredLocations = data;
+        return newState;
+      });
+    })
+    .catch((err) => console.log(err));
+  }
+
+  unFavorited(user, userID, storeID) {
+    console.log('user:', user, ' storeID:', storeID);
+    fetch('/favs', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+      body: JSON.stringify({
+        storeID: storeID
+      }),
+    })
+    .then((data) => data.json())
+    .then((data) => {
+      this.setState((prevState) => {
+        const newState = { ...prevState };
+        newState.preferredLocations = data;
+        return newState;
+      });
+    })
+    .catch((err) => console.log(err));
+  }
+
+  updateFavorites() {
+    fetch('/favs', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+    })
+    .then((data) => data.json())
+    .then((data) => {
+      this.setState((prevState) => {
+        const newState = { ...prevState };
+        newState.preferredLocations = data;
+        return newState;
+      });
+    })
+    .catch((err) => console.log(err));
+  }
+
   componentDidMount() {
     // grab the user's location using browser's location and updates state -> client needs to give permission to access location
     const successfulLookup = (position) => {
       const { latitude, longitude } = position.coords;
       this.updateUserCoordinates(latitude, longitude);
+      this.updateFavorites();
     };
 
     navigator.geolocation.getCurrentPosition(successfulLookup, console.log);
   }
 
   componentDidUpdate() {
-    console.log('State updated: ', this.state);
+    // console.log('State updated: ', this.state);
   }
 
   render() {
@@ -250,6 +318,8 @@ class App extends Component {
                 catBtnHandler={this.categoryButtonHandler}
                 searchButtonHandler={this.searchButtonHandler}
                 reportClosed={this.reportClosed}
+                favorited={this.favorited}
+                unFavorited={this.unFavorited}
               />
             )}
           />

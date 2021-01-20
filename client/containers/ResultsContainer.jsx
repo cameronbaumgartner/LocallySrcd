@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ResultCard from '../components/ResultCard.jsx';
 
-const ResultsContainer = ({ results, preferredLocations, closedLocations, reportClosed, closedStoreId }) => {
+const ResultsContainer = ({ results, preferredLocations, closedLocations, reportClosed, closedStoreId, user, userID, favorited, unFavorited }) => {
   console.log('results :', results);
   console.log('pref Loc :', preferredLocations);
   console.log('closed Loc :', closedLocations);
@@ -18,11 +18,26 @@ const ResultsContainer = ({ results, preferredLocations, closedLocations, report
         // check if the location is open & user is using account
         //if (!closedLocations[id] && preferredLocations){
         let isFav = false;
+        if (preferredLocations.includes(id)) isFav = true;
+
 
         // checking if location is the user's preferred location
         //preferredLocations[id] ? isFav = true : isFav = false;
 
-        recs.push(<ResultCard closedStoreId={closedStoreId} reportClosed={reportClosed} key={i} info={rec} isFav={isFav} />);
+        recs.push(
+          <ResultCard
+            closedStoreId={closedStoreId}
+            reportClosed={reportClosed}
+            key={i}
+            info={rec}
+            isFav={isFav}
+            storeID={id}
+            user={user}
+            userID={userID}
+            favorited={favorited}
+            unFavorited={unFavorited}
+          />
+        );
       }
       // }
     );
