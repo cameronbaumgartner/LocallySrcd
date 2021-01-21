@@ -1,11 +1,11 @@
-#searchContainer {
+.searchContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   //flex-wrap: nowrap;
-  height: 60px;
-  width: 600px;
-  margin: 50px 10px;
+  // height: 60px;
+  // width: 600px;
+  // margin: 50px 10px;
 }
 
 #searchInput {
@@ -41,7 +41,7 @@
   background-size: cover;
   border: none;
   background-color: white;
-  //align-self: center;
+  align-self: center;
   //z-index: 1000;
 }
 

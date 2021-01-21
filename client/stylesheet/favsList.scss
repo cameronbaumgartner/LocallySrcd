@@ -1,0 +1,181 @@
+#userFavorites {
+
+}
+
+.favResultCardContainer {
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 350px;
+  // height: 210px;
+  padding: 10px 8px 10px 8px;
+  margin: 2px 24px;
+  background-color: white;
+  font-family: Arial;
+  flex-direction: row;
+}
+
+#favCardContainer {
+  display: flex;
+}
+
+.favPlaceCard {
+
+  article {
+    //display: flex;
+    //flex-direction: column;
+    //justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px;
+    // height: 150px;
+    // grid-template-columns: 1fr 1fr;
+    // grid-template-rows: 1fr 1fr 1fr;
+
+    // grid-template-areas:
+    // "categories categories categories"
+    // "address address address"
+    // "phone phone phone"
+    // "totalrating reportClosed favIcon"
+  }
+
+  #categories {
+    font-size: 10px;
+    margin-bottom: 4px;
+    color: grey;
+  }
+
+  #distance {
+    font-size: 12px;
+  }
+
+  #address {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  #phone {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+}
+
+
+#finalRow {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+
+  #totalrating {
+    // grid-area: totalrating;
+    //text-align: center;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+  
+    img {
+      height: 12px;
+      width: 12px;
+    }
+  
+  }
+  
+  #reviewCount {
+    // grid-area: reviews;
+    text-align: center;
+    color: grey;
+    font-size: 8px;
+  }
+  
+  #reportClosed {
+    // grid-area: reportClosed;
+    text-align: center;
+    color: grey;
+    background-color: white;
+    border: none;
+  }
+  
+  #reportClosed:hover {
+    cursor: pointer;
+  }
+  
+  #isclosed {
+    // grid-area: reportClosed;
+    text-align: center;
+    color: red;
+    background-color: white;
+    border: none;
+  }
+  
+  #isclosed:focus {
+    outline: none;
+    text-decoration: underline;
+  }
+  
+  #favIcon {
+    // grid-area: favIcon;
+    display: flex;
+    justify-content: flex-end;
+  
+    img {
+      height: 25px;
+      width: 25px;
+      cursor: pointer;
+    }
+}
+}
+
+// rest img tags!
+.favPlacePic {
+  padding: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 5%;
+}
+
+#favCardHeader {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  // margin: 2px 3px 3px;
+  padding: 2px 5px 0px;
+  width: 290px;
+  // height: 35px;
+
+  a {
+    margin: 3px;
+    width: 60%;
+    font-size: 16px;
+    text-decoration: none; 
+    color: black;
+    transition: ease 30s;
+  }
+
+  a:hover {
+    font-style: bold;
+    //text-shadow: 1px 0px rgba(0, 0, 0, 0.432);
+    text-decoration: underline;
+  }
+
+  img {
+    height: 20px;
+    width: 20px;
+  }
+
+  #innerflex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+#reportClosed:hover {
+  text-decoration: underline;
+}
+
+#reportClosed:focus {
+  outline: none;
+  text-decoration: underline;
+}

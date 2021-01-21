@@ -1,12 +1,13 @@
 import React, { Component, useState } from 'react';
 import { Link } from "react-router-dom";
 
-const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signUpPop, signUpButtonHandler, createUser} ) => {
+const NavBar = ( {logInSubmitHandler, userStatus, userName, favorites, logoutHandler, signUpPop, signUpButtonHandler, createUser, favResults, closedLocations, favListHandler} ) => {
       // if user is logged in, we should render a new nav bar welcoming back the user.  logInSubmitHandler={logInSubmitHandler} 
       console.log('signup?', signUpPop)
   // check if user is logged in and if they have pressed to sign up
 
   const [noLogInput, setNoLogInput] = useState('');
+  const [userDrop, setUserDrop] = useState(false);
 
   const pressEnterLogin = (e) => {
     if (e.key === 'Enter') {
@@ -44,6 +45,104 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
     }
   }
 
+  let FavIcon = <img src="../assets/fullheart.png"></img>;
+  let recs = []; 
+  if (!favResults) {
+    recs = null;
+  } else {
+    favResults.forEach(
+      (rec, i) => {
+        // if (id !== closedStoreId) {
+        // check if the location is open & user is using account
+        //if (!closedLocations[id] && favorites){
+        let isFav = false;
+        if (favorites.includes(id)) isFav = true;
+        const metersToMiles = (meters) => {
+          return Math.round((meters / 1609.344) * 10) / 10;
+        };
+        
+        const fullStars = (rating) => {
+          const total = [];
+          let count = Math.floor(rating);
+          while (count > 0) {
+            total.push(<img src="../assets/fullstar.png"></img>);
+            count--;
+          }
+          return total;
+        };
+
+          const {
+            display_phone,
+            image_url,
+            name,
+            rating,
+            review_count,
+            url,
+            categories,
+            location,
+            distance,
+            id,
+          } = rec;
+          // concatenating the address to display
+          let restAddress = location.display_address.join(', ');
+        
+          const displayCategories = categories
+            .map((obj) => {
+              delete obj.alias;
+              return obj.title;
+            })
+            .join(' ');
+        
+          const handleFavorite = () => {
+            if (isFav) unFavorited(storeID);
+            favorited(storeID);
+          }
+          //convert meters into miles -> this is the distance from place to user
+          const distFromUser = metersToMiles(distance);
+        
+          // render the correct full rating stars
+          const displayStars = fullStars(rating);
+          // if half star rating:
+          if (rating % 1 !== 0) {
+            displayStars.push(<img src="../assets/halfstar.png"></img>);
+          }
+
+        recs.push(
+          <div className="favResultCardContainer">
+            <div id="favCardContainer">
+              <img className="favPlacePic" src={image_url}></img>
+              <div className="favPlaceCard">
+              <div id="favCardHeader">
+                <a href={url} target="_blank">
+                  {' '}
+                  {name}
+                </a>
+                <div id="innerflex">
+                  <img src="../assets/thickpin.png"></img>
+                  <span id="distance">{distFromUser} miles</span>
+                </div>
+              </div>
+              <article>
+                <span id="categories">{displayCategories}</span>
+                <span id="address">{restAddress}</span>
+                <span id="phone">{display_phone}</span>
+              </article>
+            </div>
+            </div>
+            <div id="finalRow">
+              <div id="totalrating">
+                <div className="stars">{displayStars}</div>
+                <span id="reviewCount"> {review_count}</span>
+              </div>
+              <button id='reportClosed' value={id} type='button' onClick={(event) => reportClosed(event, reportClosed)}>Report Closed</button>
+              <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}</div>
+            </div>
+          </div>
+        );
+      }
+    );
+  }
+
    if (!userStatus && !signUpPop) {
     return (
       <div>
@@ -62,7 +161,7 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
             >
               Log In
           </button>
-          <button id="signup" type="button" onClick={() => signUpButtonHandler()}>Sign Up</button>
+          <button id="signup" type="button" onClick={() => {setNoLogInput(''); signUpButtonHandler()} }>Sign Up</button>
           </form>
         </div>
         <div id="noLogInput">{noLogInput}</div>
@@ -95,7 +194,7 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
           </div>
           <div>
           <button id="signuplogbtn" type="button"
-            onClick={() => signUpButtonHandler() }
+            onClick={() => {setNoLogInput(''); signUpButtonHandler()} }
             >
               Log In
           </button>
@@ -104,14 +203,31 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, logoutHandler, signU
     )
     // otherwise we return a welcome home message
   } else {
-    return (
-      <div className="loggedin">
-        Welcome home, {userName}
-        <button id="logbutton" type="button" onClick={() => logoutHandler()
-        }>Log Out</button>
-      </div>
-       
-    )
+    if (userDrop) {
+      return (
+        <div className="loggedin">
+          Welcome home, <span id="userName" onClick={() => setUserDrop(userDrop ? false : true)}>{userName}▼</span>
+          <button id="logbutton" type="button" onClick={() => logoutHandler()
+          }>Log Out</button>
+          <div id="userDropContainer">
+            <div id="userLocation">Location: change user location?</div>
+            {/*need to call favListHandler() to update favResults and reload favorites list here*/}
+            <div id="userFavorites">
+              Favorites:
+              {recs}
+            </div>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="loggedin">
+          Welcome home, <span id="userName" onClick={() => { favListHandler(); setUserDrop(userDrop ? false : true) }}>{userName}▼</span>
+          <button id="logbutton" type="button" onClick={() => logoutHandler()
+          }>Log Out</button>
+        </div>
+      )
+    }
   }
 };
   

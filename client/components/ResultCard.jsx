@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,useEffect,useState } from 'react';
 
 const metersToMiles = (meters) => {
   return Math.round((meters / 1609.344) * 10) / 10;
@@ -32,6 +32,9 @@ const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, u
   } = info;
   // concatenating the address to display
   let restAddress = location.display_address.join(', ');
+  const [reviewDisplay, setReviewDisplay] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  let tempReviews = [];
 
   const displayCategories = categories
     .map((obj) => {
@@ -61,6 +64,59 @@ const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, u
   } else {
     FavIcon = <img src="../assets/emptyheart.png"></img>;
   }
+
+  useEffect(() => {
+    if (reviewDisplay) {
+      // fetch(`/api/reviews/?storeID=${storeID}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'Application/JSON',
+      //   },
+      // })
+      // .then((data) => data.json())
+      // .then((data) => {
+      //   for(let i = 0; i < data.length; i += 1) {
+      //     tempReviews.push(
+      //       <div className="review" key={storeID,i}>
+      //         <div className="reviewDetails">
+      //           <p>{data[i].username}</p>
+      //           <p>Rating: {data[i].rating}</p>
+      //         </div>
+      //         <div className="reviewBody">
+      //           <p>{data[i].text}</p>
+      //         </div>
+      //       </div>
+      //     );
+      //   }
+      // })
+      // .catch((err) => console.log(err));
+      tempReviews.push(
+        <div className="review" key="1">
+          <div className="reviewDetails">
+            <p>Sam P</p>
+            <p>Rating: 5/5</p>
+          </div>
+          <div className="reviewBody">
+            <p>100% would again</p>
+          </div>
+        </div>
+      );
+      tempReviews.push(
+        <div className="review" key="1">
+          <div className="reviewDetails">
+            <p>Cam B</p>
+            <p>Rating: 5/5</p>
+          </div>
+          <div className="reviewBody">
+            <p>100% would again</p>
+          </div>
+        </div>
+      );
+      setReviews(tempReviews);
+    } else {
+      setReviews([]);
+    }
+  }, [reviewDisplay])
   // check if the current store id is equal to the closed store id in state
   if (id !== closedStoreId) {
     return (
@@ -85,12 +141,16 @@ const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, u
             <span id="phone">{display_phone}</span>
             <div id="totalrating">
               <div className="stars">{displayStars}</div>
-              <span id="reviews"> {review_count}</span>
+              <span id="reviewCount"> {review_count}</span>
             </div>
             <button id='reportClosed' value={id} type='button' onClick={(event) => reportClosed(event, reportClosed)}>Report Closed</button>
             {/* add favorite click listener here */}
             <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}</div>
           </article>
+        </div>
+        <div id="reviewContainer">
+          <span onClick={() => {setReviewDisplay(reviewDisplay ? false : true)}}>Reviews ▼</span>
+          {reviews}
         </div>
       </div>
     )
@@ -118,13 +178,15 @@ const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, u
             <span id="phone">{display_phone}</span>
             <div id="totalrating">
               <div className="stars">{displayStars}</div>
-              <span id="reviews"> {review_count}</span>
+              <span id="reviewCount"> {review_count}</span>
             </div>
            {/* we should consider addidng a another event listener to toggle back to open if status changes */}
              <button id="isclosed">CLOSED</button>
-            {/* add favorite click listener here */}
             <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}</div>
           </article>
+        </div>
+        <div>
+          {reviews}
         </div>
       </div>
     )}

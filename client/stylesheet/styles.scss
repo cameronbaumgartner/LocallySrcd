@@ -1,6 +1,7 @@
 @import 'homePage.scss';
 @import 'searchCont.scss';
 @import 'resultCard.scss';
+@import 'favsList.scss';
 
 $main-grey:  rgb(104, 99, 99);
 $main-red: #EC4C4C;
@@ -52,7 +53,7 @@ a {
     color: $main-grey;
     margin-top: 1.5em;
     margin-right: 1em;
-
+    position: relative;
   }
 
   #logbutton {
@@ -185,6 +186,11 @@ a {
     background-color: lighten($main-red, 20%);
     color: white;
     cursor: pointer;
+  }
+
+  #userName:hover {
+    cursor: pointer;
+    color: darken(rgb(104, 99, 99), 20%);
   }
 
 }
