@@ -11,7 +11,7 @@ const locationArray = [];
 
 const mapToMap = (resArray) => {
   for(let i = 0; i < resArray.length; i ++){
-    console.log('in map to map:',resArray[i]);
+    // console.log('in map to map:',resArray[i]);
     locationArray.push(
       <LocationPin
         lat={resArray[i].lat}

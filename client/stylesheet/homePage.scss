@@ -95,8 +95,10 @@
   position: absolute;
   top: 50px;
   right: 0px;
+  z-index: 1;
+  background-color: white;
 }
 
 #userLocation {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }

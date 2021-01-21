@@ -6,11 +6,12 @@ const router = express.Router();
 const path = require('path');
 
 router.post('/',
-userController.getUser,
-cookieController.setSSIDCookie,
-sessionController.startSession,
-(req, res) => {
-  res.status(200).json(res.locals);
-});
+  userController.getUser,
+  cookieController.setSSIDCookie,
+  sessionController.startSession,
+  (req, res) => {
+    res.status(200).json(res.locals);
+  }
+);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const express = require('express');
 const mainController = require('../controllers/mainController.js');
+const sessionController = require('../controllers/sessionController.js');
 const router = express.Router();
 
 router.post('/report', mainController.reportClosed, (req, res) => {
@@ -26,6 +27,7 @@ router.get('/reviews',
 );
 
 router.post('/reviews',
+  // sessionController.isLoggedIn,
   mainController.addReview,
   mainController.getReviews,
   (req, res) => res.status(200).json(res.locals.reviews)
