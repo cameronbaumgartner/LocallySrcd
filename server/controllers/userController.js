@@ -25,8 +25,8 @@ const userController = {
 
   // authenticate user by checking if they are in the database
   getUser(req, res, next) {
-    console.log('in getUser', req.body);
     const { username, password } = req.body;
+    console.log('Logging in user', username);
 
     User.findOne({ username },
       (err, foundUser) => {
