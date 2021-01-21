@@ -93,9 +93,8 @@ class App extends Component {
       .then((data) => {
         this.setState((prevState) => {
           const newState = { ...prevState };
-          console.log('api data:', data);
           newState.results = data.results;
-          newState.closedLocations = data.closedLocations;
+          newState.closedStoreList = data.closedStoreList;
           newState.fetchTerm = data.term;
           return newState;
         });

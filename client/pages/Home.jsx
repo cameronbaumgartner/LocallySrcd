@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TopCategoriesContainer from '../containers/TopCategoriesContainer.jsx';
 import SearchContainer from '../containers/SearchContainer.jsx';
 import ResultsContainer from '../containers/ResultsContainer.jsx';
-import Map from '../components/GoogleMap.jsx';
+import { Map } from '../components/GoogleMap.jsx';
 
 
 const Home = (props) => {

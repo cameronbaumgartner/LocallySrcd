@@ -1,5 +1,6 @@
 import React from 'react';
 import ResultCard from '../components/ResultCard.jsx';
+import { mapToMap } from '../components/GoogleMap.jsx';
 
 const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, closedStoreId, user, userID, favorited, unFavorited }) => {
 
@@ -8,6 +9,7 @@ const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, c
   console.log('closed Loc :', closedLocations);
 
   let recs = [];
+  let forMap = [];
 
   if (!results) {
     recs = null;
@@ -20,7 +22,7 @@ const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, c
         //if (!closedLocations[id] && favorites){
         let isFav = false;
         if (favorites.includes(id)) isFav = true;
-
+        forMap.push(rec.coordinates)
 
         // checking if store is one of the user's favs
         //favorites[id] ? isFav = true : isFav = false;
@@ -42,6 +44,7 @@ const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, c
       }
       // }
     );
+    mapToMap(forMap);
   }
 
   return (
