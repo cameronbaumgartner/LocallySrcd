@@ -67,7 +67,12 @@ const userController = {
         return next(err);
       }
 
-      res.locals.favorites = user.favorites;
+      try {
+        res.locals.favorites = user.favorites;
+      }
+      catch (error) {
+        console.warn('Error adding user #', userID, '\'s favorites to the response object: ', error);
+      }
       return next();
     });
   },
