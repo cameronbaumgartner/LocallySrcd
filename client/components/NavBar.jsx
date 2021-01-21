@@ -210,7 +210,6 @@ const NavBar = ( {logInSubmitHandler, userStatus, userName, favorites, logoutHan
           <button id="logbutton" type="button" onClick={() => logoutHandler()
           }>Log Out</button>
           <div id="userDropContainer">
-            <div id="userLocation">Location: change user location?</div>
             {/*need to call favListHandler() to update favResults and reload favorites list here*/}
             Favorites:
             <div id="userFavorites">
