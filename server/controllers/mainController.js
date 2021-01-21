@@ -7,8 +7,7 @@ const { ClosedStore, Review } = require('../models/storeModel.js');
 const User = require('../models/userModel');
 
 const mainController = {};
-const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.SSID
-const user = { _id: userID, username: 'shelby'}; // TODO: replace with username queried from users collection
+const userID = '60074aa51868f461b0b91e1d';  // TODO: replace with req.cookies.SSID
 
 // get stores by search term
 mainController.getResults = (req, res, next) => {
@@ -56,44 +55,51 @@ mainController.getResults = (req, res, next) => {
     });
 };
 
+// helper function to synchronously query the database to find out the username associated with each review in the array returned from getReviews, then add that username as a proprety on the review
+// using promise.all to iterate synchronously through asynchronous queries on each review in the array
+mainController.getUsernames = (res, reviews) => {
+  res.locals.reviews = [];
+  const promises = [];
+  for (let i = 0; i < reviews.length; i++) {
+    const clone = Object.assign(reviews[i]);
+
+    promises.push(
+      User.findById(clone.userID, (err, user) => {
+        if (err) {
+          console.warn('ERROR at getReviews forEach: ', err);
+          return next(err);
+        }
+        
+        if (user) {
+          // console.log('Found user: ', user.username);
+          clone.username = user.username;
+          res.locals.reviews.push(clone);
+        } else {
+          console.log(`User not found at id ${clone.userID}`);
+        }
+
+        // TODO: get the modified review objects to return out of getUsernames, NOT the found users.
+      }).exec()
+    );
+  }
+  return Promise.allSettled(promises);
+};
+
+
 // reviews and ratings
 mainController.getReviews = (req, res, next) => {
   const { storeID } = req.query;
-  console.log('Getting reviews for storeID ', storeID, typeof storeID);
+  console.log('Getting reviews for storeID ', storeID);
 
   Review.find({ storeID }, (err, reviews) => {
     if(err) {
       console.warn('ERROR at getReviews: ', err);
       return next(err);
     }
-
-    console.log('Reviews before iterating: ', reviews);
     
-    // using promise.all to iterate synchronously through asynchronous queries on each review in the array
-    function getUsernames() {
-      const promises = [];
-      for (let i = 0; i < reviews.length; i++) {
-        console.log(reviews[i].userID);
-        promises.push(
-          User.findById(reviews[i].userID, (err, user) => {
-            if (err) {
-              console.warn('ERROR at getReviews forEach: ', err);
-              return next(err);
-            }
-            // reviews[i].username = user.username;
-            console.log('Found user: ', user);
-          })
-        );
-      }
-      return Promise.all(promises);
-    }
-    
-    getUsernames().then(() => {
-      console.log('Reviews after iterating: ', reviews);
-      res.locals.reviews = reviews;
+    mainController.getUsernames(res, reviews).then(() => {
       return next();
     });
-
   });
 }
 
@@ -102,7 +108,7 @@ mainController.addReview = (req, res, next) => {
   const { text, rating } = req.body;
   console.log('Adding review to storeID ', storeID, ': ', text);
 
-  Review.create({ user, storeID, text, rating }, (err, doc) => {
+  Review.create({ userID, storeID, text, rating }, (err, doc) => {
     if (err) {
       console.warn('ERROR at addReview: ', err);
       return next(err);
@@ -112,40 +118,6 @@ mainController.addReview = (req, res, next) => {
     return next();
   });
 }
-
-/*
-mainController.getRatings = (req, res, next) => {
-  const { storeID } = req.query;
-  console.log('Getting ratings for storeID ', storeID);
-
-  Rating.find({ storeID }, (err, ratings) => {
-    if(err) {
-      console.warn('ERROR at getRatings: ', err);
-      return next(err);
-    }
-
-    console.log('Got ratings: ', ratings);
-    res.locals.ratings = ratings;
-    return next();
-  });
-}
-
-mainController.addRating = (req, res, next) => {
-  const { storeID } = req.query;
-  const { rating } = req.body;
-  console.log('Adding rating to storeID ', storeID, ': ', rating);
-
-  Rating.create({ user, storeID, rating }, (err, doc) => {
-    if (err) {
-      console.warn('ERROR at addRating: ', err);
-      return next(err);
-    }
-
-    console.log('New rating added to db: ', doc);
-    return next();
-  });
-}
-*/
 
 // closed stores
 mainController.getClosedStores = (req, res, next) => {

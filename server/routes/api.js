@@ -19,6 +19,7 @@ router.post('/',
   }
 );
 
+// if you inspect the response in Postman, it may look like the usernames were not added to the review objects. However, console-logging the property directly, e.g. res.locals.reviews[0].username, shows that it is in fact present on the object. 
 router.get('/reviews',
   mainController.getReviews,
   (req, res) => res.status(200).json(res.locals.reviews)
@@ -30,15 +31,5 @@ router.post('/reviews',
   (req, res) => res.status(200).json(res.locals.reviews)
 );
 
-// router.get('/ratings',
-//   mainController.getRatings,
-//   (req, res) => res.status(200).json(res.locals.ratings)
-// );
-
-// router.post('/ratings',
-//   mainController.addRating,
-//   mainController.getRatings,
-//   (req, res) => res.status(200).json(res.locals.ratings)
-// );
 
 module.exports = router;
