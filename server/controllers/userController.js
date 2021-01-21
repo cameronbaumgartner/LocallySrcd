@@ -61,6 +61,7 @@ const userController = {
   // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
     const userID = req.cookies.ssid;
+    console.log('userID:', userID);
 
     User.findOne({ _id: userID }, (err, user) => {
       if (err) {
@@ -68,6 +69,7 @@ const userController = {
         return next(err);
       }
 
+      console.log('User found at getFavorites: ', user);
       try {
         res.locals.favorites = user.favorites;
       }
@@ -121,6 +123,7 @@ const userController = {
           return next(err);
         }
 
+        console.log('updateFavorites is sending back this array: ', user.favorites);
         res.locals.favorites = user.favorites;
         return next();
       }

@@ -39,33 +39,6 @@ mainController.getResults = (req, res, next) => {
         return biz;
       });
 
-      /*
-      // use reduce to take response object's array of businesses and reduce it down to 10 results, removing unneeded key-value pairs
-      let counter = 0;
-      const reducedResults = response.jsonBody.businesses.reduce(
-        (acc, cv, idx) => {
-          // checking if the results arr of obj's id matches the closed store's arr of obj's id
-          let storeIdVal = cv.id;
-          if (res.locals.closedStoresList.hasOwnProperty(storeIdVal)) {
-            counter++;
-            return acc;
-          }
-
-          // delete irrelevant key val pairs from yelp's API response
-          if (idx < 10 + counter) {
-            delete cv.alias;
-            delete cv.is_closed;
-            delete cv.transactions;
-            delete cv.price;
-            acc.push(cv);
-          }
-          return acc;
-        },
-        []
-      );
-      res.locals.results = reducedResults;
-      */
-
       res.locals.results = mappedResults;
       // send back term too
       res.locals.term = term;

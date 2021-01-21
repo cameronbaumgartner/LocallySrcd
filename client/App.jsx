@@ -10,16 +10,15 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      user: '', // will reassigned as the user object sent back from server after client signs up/logins // 'username'
+      username: '', // will be reassigned after client signs up/logins
       isLoggedIn: false,
-      userID: '', // will be replaced by sessions
       favorites: [], // favorites: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
       closedLocations: null, // closed locations: object with keys as the placeIDs and values of true; -> will be created when client receives results back from fetch request
       fetchTerm: '',
       signUpPop: false,
       closedStoreId: null,
-      //longitude: number -> will be created after component mounts
-      //latitude: number -> will be created after component mounts
+      longitude: 40.700655, // default; will be supplied from db after component mounts
+      latitude: -73.94772689999999 // default
       // results: an array of objects // will be created when server sends back retrieved list of results - this should be update whenever keyword or category is submitted by user
     };
 
@@ -38,8 +37,8 @@ class App extends Component {
 
   updateUserCoordinates(latitude, longitude) {
     // updates the state with the user's current location
-    const userLat = latitude;
-    const userLong = longitude;
+    const userLat = latitude || 40.700655;    // default values in case lat or long is null (due to browser settings)
+    const userLong = longitude || -73.94772689999999;
 
     this.setState((prevState) => {
       const newState = { ...prevState };
@@ -56,7 +55,7 @@ class App extends Component {
     fetch('/api', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
         latitude: this.state.latitude,
@@ -83,7 +82,7 @@ class App extends Component {
     fetch('/api', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
         latitude: this.state.latitude,
@@ -108,7 +107,7 @@ class App extends Component {
     fetch('/api', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
         latitude: this.state.latitude,
@@ -136,22 +135,22 @@ class App extends Component {
     fetch('/login', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        username,
+        password,
       }),
     })
       .then((data) => data.json())
       .then((data) => {
         this.setState((prevState) => {
           const newState = { ...prevState };
-          newState.user = data.username
+          newState.username = data.username
           newState.isLoggedIn = true;
           newState.favorites = data.favorites;
           return newState;
-        });
+        }, this.updateFavorites());
       })
       .catch((err) => console.log('ERROR at logInSubmitHandler POST:', err));
   }
@@ -188,11 +187,11 @@ class App extends Component {
     fetch('/signup', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        username,
+        password,
       }),
     })
     .then((data) => data.json())
@@ -216,7 +215,7 @@ class App extends Component {
     fetch('/api/report', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
         latitude: this.state.latitude,
@@ -237,12 +236,12 @@ class App extends Component {
       .catch((err) => console.log('ERROR at reportClosed POST:', err));
   }
 
-  favorited(user, userID, storeID) {
-    console.log('user:', user, ' storeID:', storeID);
+  favorited(storeID) {
+    console.log('Adding fav to storeID:', storeID);
     fetch('/favs', {
       method: 'POST',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
         storeID: storeID
@@ -259,12 +258,12 @@ class App extends Component {
     .catch((err) => console.log('ERROR at favorited POST:', err));
   }
 
-  unFavorited(user, userID, storeID) {
-    console.log('user:', user, ' storeID:', storeID);
+  unFavorited(storeID) {
+    console.log('Removing fav from storeID:', storeID);
     fetch('/favs', {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
       body: JSON.stringify({
         storeID: storeID
@@ -281,11 +280,12 @@ class App extends Component {
     .catch((err) => console.log('ERROR at unFavorited DELETE:', err));
   }
 
+  // get this user's favs list on a successful login or page load
   updateFavorites() {
     fetch('/favs', {
       method: 'GET',
       headers: {
-        'Content-Type': 'Application/JSON',
+        'Content-Type': 'application/JSON',
       },
     })
     .then((data) => data.json())
@@ -293,6 +293,7 @@ class App extends Component {
       this.setState((prevState) => {
         const newState = { ...prevState };
         newState.preferredLocations = data;
+        console.log('favorites array:',data);
         return newState;
       });
     })
@@ -304,7 +305,6 @@ class App extends Component {
     const successfulLookup = (position) => {
       const { latitude, longitude } = position.coords;
       this.updateUserCoordinates(latitude, longitude);
-      this.updateFavorites();
     };
 
     navigator.geolocation.getCurrentPosition(successfulLookup, console.log);
@@ -329,7 +329,7 @@ class App extends Component {
             ></img>
           </Link>
           <NavBar 
-            userName={this.state.user} 
+            userName={this.state.username} 
             signUpPop={this.state.signUpPop}
             userStatus={this.state.isLoggedIn}
             favorites={this.state.favorites}

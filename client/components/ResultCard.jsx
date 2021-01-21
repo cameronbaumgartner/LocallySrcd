@@ -14,7 +14,8 @@ const fullStars = (rating) => {
   return total;
 };
 
-const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, userID, favorited, unFavorited }) => {
+const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, favorited, unFavorited }) => {
+  const isFav = favorites.includes(storeID);
   console.log('result card: ', info);
   console.log('I AM A FAV: ', isFav);
 
@@ -44,8 +45,10 @@ const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, u
     .join(' ');
 
   const handleFavorite = () => {
+    console.log(storeID);
     if (isFav) unFavorited(storeID);
-    favorited(storeID);
+    else favorited(storeID);
+    // isFav = !isFav;
   }
   //convert meters into miles -> this is the distance from place to user
   const distFromUser = metersToMiles(distance);
@@ -145,7 +148,7 @@ const ResultCard = ({ info, isFav, reportClosed, closedStoreId, storeID, user, u
             </div>
             <button id='reportClosed' value={id} type='button' onClick={(event) => reportClosed(event, reportClosed)}>Report Closed</button>
             {/* add favorite click listener here */}
-            <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}</div>
+            <div id="favIcon" onClick={() => {console.log('favorited'); handleFavorite()}}>{FavIcon}</div>
           </article>
         </div>
         <div id="reviewContainer">

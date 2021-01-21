@@ -17,26 +17,20 @@ const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, c
     results.forEach(
       (rec, i) => {
         const { id } = rec;
-        // if (id !== closedStoreId) {
-        // check if the location is open & user is using account
-        //if (!closedLocations[id] && favorites){
-        let isFav = false;
-        if (favorites.includes(id)) isFav = true;
         forMap.push(rec.coordinates)
 
         // checking if store is one of the user's favs
         //favorites[id] ? isFav = true : isFav = false;
-
         recs.push(
           <ResultCard
             closedStoreId={closedStoreId}
             reportClosed={reportClosed}
             key={i}
             info={rec}
-            isFav={isFav}
             storeID={id}
             user={user}
             userID={userID}
+            favorites={favorites}
             favorited={favorited}
             unFavorited={unFavorited}
           />
