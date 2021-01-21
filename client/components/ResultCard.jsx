@@ -36,6 +36,7 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
   const [newRating, setNewRating] = useState(5);
+  const [fetched, setFetched] = useState(false);
 
   // submission form should be first element in reviews array
   let tempReviews = [];
@@ -83,12 +84,31 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
       '';
   }
 
+  const displayReviews = (reviewDisplay) => {
+    const reviewHTML = reviews.map((review, index) => {
+      return (
+        <div className="review" key={`Store${storeID}Review${review._id || index}`}>
+          <div className="reviewDetails">
+            <p>{review.username || 'anonymous'}</p>
+            <p>Rating: {review.rating}/5</p>
+          </div>
+          <div className="reviewBody">
+            <p>{review.text}</p>
+          </div>
+        </div>
+      );
+    });
+
+    return reviewDisplay ? reviewHTML : '';
+  }
+
   // form submission handler
   const submitReview = (text, rating) => {
     if (!text || !rating) return;
     console.log('Submitting', rating, '-star review for store ', storeID, ': ', text);
+
     const endpoint = '/api/reviews/?storeID=' + storeID;
-    console.log('endpoint', endpoint);
+
     fetch(endpoint,
      {
       method: 'POST',
@@ -103,6 +123,7 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
     .then((data) => { 
       setReviewText('');
       setNewRating(1);
+      setFetched(true);
     }).catch(err => console.warn('ERROR at submitReview POST: ', err));
   };
 
@@ -135,60 +156,25 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
   }
   useEffect(() => {
     // send get request to database when Reviews label is clicked to get reviews array
-    if (reviewDisplay) {
-      fetch(`/api/reviews/?storeID=${storeID}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'Application/JSON',
-        },
-      })
-      .then((data) => data.json())
-      .then((data) => {
-        for(let i = 0; i < data.length; i += 1) {
-          tempReviews.push(
-            <div className="review" key={`Store${storeID}Review${i}`}>
-              <div className="reviewDetails">
-                <p>{data[i].username}</p>
-                <p>Rating: {data[i].rating}/5</p>
-              </div>
-              <div className="reviewBody">
-                <p>{data[i].text}</p>
-              </div>
-            </div>
-          );
-        }
-      })
-      .catch((err) => console.log(err));
-    // if (reviewDisplay) {
-    //   tempReviews.push(
-    //     <div className="review" key="1">
-    //       <div className="reviewDetails">
-    //         <p>Sam P</p>
-    //         <p>Rating: 5/5</p>
-    //       </div>
-    //       <div className="reviewBody">
-    //         <p>100% would again</p>
-    //       </div>
-    //     </div>
-    //   );
-    //   tempReviews.push(
-    //     <div className="review" key="2">
-    //       <div className="reviewDetails">
-    //         <p>Cam B</p>
-    //         <p>Rating: 5/5</p>
-    //       </div>
-    //       <div className="reviewBody">
-    //         <p>Meh</p>
-    //       </div>
-    //     </div>
-    //   );
-    //   setReviews(tempReviews);
-    } else {
-      setReviews([]);
-    }
-  }, [reviewDisplay])
+    fetch(`/api/reviews/?storeID=${storeID}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+    })
+    .then((data) => data.json())
+    .then((data) => {
+      for(let i = 0; i < data.length; i += 1) {
+        console.log('reviewbody:', data[i].text);
+        setReviews(data);
+      }
+    })
+    .catch((err) => console.log(err));
+    setReviews(tempReviews);
+  }, [reviewDisplay, fetched])
+
+
   // check if the current store id is equal to the closed store id in state
- 
   if (id !== closedStoreId) {
     return (
       <div className="resultCardContainer">
@@ -227,7 +213,7 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
         <div className="reviewContainer">
           <span className="reviewLabel" onClick={() => {setReviewDisplay(reviewDisplay ? false : true)}}>Do you recommend this business? ▼</span>
           { displayForm(reviewDisplay) }
-          {reviews}
+          { displayReviews(reviewDisplay) }
         </div>
       </div>
     )
