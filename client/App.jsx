@@ -67,7 +67,7 @@ class App extends Component {
       .then((data) => data.json())
       .then((data) => {
         console.log('data back from category ', data)
-        this.setState((prevState) => {
+        this.setState((prevState) => { 
           const newState = { ...prevState };
           newState.results = data.results;
           newState.closedLocations = data.closedLocations;
@@ -75,7 +75,7 @@ class App extends Component {
           return newState;
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log('ERROR at categoryButtonHandler POST:', err));
   }
 
   favListHandler() {
@@ -101,7 +101,7 @@ class App extends Component {
           return newState;
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log('ERROR at favListHandler POST:', err));
   }
 
   searchButtonHandler(term) {
@@ -126,7 +126,7 @@ class App extends Component {
           return newState;
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log('ERROR at searchButtonHandler POST:', err));
       const search = document.getElementById('searchInput');
       search.value = '';
   }
@@ -153,12 +153,15 @@ class App extends Component {
           return newState;
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log('ERROR at logInSubmitHandler POST:', err));
   }
   
   // event handler when log out button is clicked
   logoutHandler() {
-    fetch('/logout', { method: 'POST' });
+    fetch('/logout', 
+      { method: 'POST' }
+    ).then((data) => console.log('Result of logoutHandler POST:', data))
+    .catch((err) => console.log('ERROR at logoutHandler POST:', err));
 
     this.setState((prevState) => {
       const newState = { ...prevState }
@@ -203,7 +206,7 @@ class App extends Component {
         return newState;
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log('ERROR at createUser POST:', err));
   }
 
   // event handler for user to report location closed
@@ -231,7 +234,7 @@ class App extends Component {
           return newState;
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log('ERROR at reportClosed POST:', err));
   }
 
   favorited(user, userID, storeID) {
@@ -253,7 +256,7 @@ class App extends Component {
         return newState;
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log('ERROR at favorited POST:', err));
   }
 
   unFavorited(user, userID, storeID) {
@@ -275,7 +278,7 @@ class App extends Component {
         return newState;
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log('ERROR at unFavorited DELETE:', err));
   }
 
   updateFavorites() {
@@ -293,7 +296,7 @@ class App extends Component {
         return newState;
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log('ERROR at updateFavorites GET:', err));
   }
 
   componentDidMount() {
