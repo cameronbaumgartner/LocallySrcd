@@ -8,15 +8,24 @@ const userController = {
 
     User.create({ username, password },
       (err, newUser) => {
+<<<<<<< HEAD
         if (err) res.sendStatus(409);
 
         const { username, favorites } = newUser;
+=======
+        if (err) {
+          return next({
+            log: 'Error user already exists',
+            message: err,
+          });
+        }
+>>>>>>> adac8d168865af0a672e3aa1c60b08839b045c68
         res.locals.userID = newUser._id.toString();
-        res.locals.username = username;
-        res.locals.favorites = favorites;
+        res.locals.username = newUser.username;
+        res.locals.favorites = newUser.favorites;
         console.log('res.locals.user -->', res.locals);
         return next();
-      }
+      },
     );
   },
 
@@ -27,27 +36,28 @@ const userController = {
 
     User.findOne({ username },
       (err, foundUser) => {
-        if (err)
+        if (err) {
           return next({
             log: 'Error in user.find middleware',
             message: err,
           });
+        }
 
-        bcrypt.compare(password, foundUser.password, (err, result) => {
-          if (err) {
-            console.warn('ERR at bcrypt.compare: ', err);
+        bcrypt.compare(password, foundUser.password, (error, result) => {
+          if (error) {
+            console.warn('ERR at bcrypt.compare: ', error);
             return next(err);
           }
-          if (result) {
-            res.locals.username = foundUser.username;
-            res.locals.favorites = foundUser.favorites;
-            res.locals.userID = foundUser._id.toString();
-            return next();
+          if (!result) {
+            // if result is null
+            console.log('Unsuccessful login attempt. Result of bycrpt.compare: ', result);
+            return return res.sendStatus(403);
           }
 
-          // else if result is null (?)
-          console.log('Unsuccessful login attempt. Result of bycrpt.compare: ', result);
-          return res.sendStatus(403);
+          res.locals.username = foundUser.username;
+          res.locals.favorites = foundUser.favorites;
+          res.locals.userID = foundUser._id.toString();
+          return next();
         });
       }
     );
@@ -76,7 +86,7 @@ const userController = {
 
   // add the store faved on the frontend to the array of favorites
   addFavorites(req, res, next) {
-    let { storeID } = req.body;  
+    const { storeID } = req.body;  
 
     try {
       res.locals.favorites.push(storeID);
