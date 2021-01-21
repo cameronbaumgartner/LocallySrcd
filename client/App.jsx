@@ -348,7 +348,7 @@ class App extends Component {
             path="/"
             exact
             render={() => (
-              <Home
+              <Home  // contains GoogleMap and search results
                 state={this.state}
                 catBtnHandler={this.categoryButtonHandler}
                 searchButtonHandler={this.searchButtonHandler}
