@@ -10,7 +10,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      username: '', // will be reassigned after client signs up/logins
+      username: 'user', // will be reassigned after client signs up/logins
       isLoggedIn: false,
       favorites: [], // favorites: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
       closedLocations: null, // closed locations: object with keys as the placeIDs and values of true; -> will be created when client receives results back from fetch request
@@ -92,7 +92,7 @@ class App extends Component {
     })
       .then((data) => data.json())
       .then((data) => {
-        console.log('data back from category ', data)
+        // console.log('data back from category ', data)
         this.setState((prevState) => {
           const newState = { ...prevState };
           newState.favResults = data.results;
@@ -172,7 +172,7 @@ class App extends Component {
 
     this.setState((prevState) => {
       const newState = { ...prevState }
-      newState.user = null;
+      newState.username = 'user';
       newState.favorites = [];
       newState.isLoggedIn = false;
       newState.results = null;
@@ -218,7 +218,7 @@ class App extends Component {
       console.log(data);
       this.setState((prevState) => {
         const newState = { ...prevState };
-        newState.user = data.username
+        newState.username = data.username
         newState.isLoggedIn = true;
         newState.signUpPop = false;
         newState.favorites = data.favorites;
@@ -257,7 +257,7 @@ class App extends Component {
   }
 
   favorited(storeID) {
-    console.log('Adding fav to storeID:', storeID);
+    // console.log('Adding fav to storeID:', storeID);
     fetch('/favs', {
       method: 'POST',
       headers: {
@@ -271,7 +271,7 @@ class App extends Component {
     .then((data) => {
       this.setState((prevState) => {
         const newState = { ...prevState };
-        newState.preferredLocations = data;
+        newState.favorites = data;
         return newState;
       });
     })
@@ -279,7 +279,7 @@ class App extends Component {
   }
 
   unFavorited(storeID) {
-    console.log('Removing fav from storeID:', storeID);
+    // console.log('Removing fav from storeID:', storeID);
     fetch('/favs', {
       method: 'DELETE',
       headers: {
@@ -293,7 +293,7 @@ class App extends Component {
     .then((data) => {
       this.setState((prevState) => {
         const newState = { ...prevState };
-        newState.preferredLocations = data;
+        newState.favorites = data;
         return newState;
       });
     })
@@ -312,8 +312,8 @@ class App extends Component {
     .then((data) => {
       this.setState((prevState) => {
         const newState = { ...prevState };
-        newState.preferredLocations = data;
-        console.log('favorites array:',data);
+        newState.favorites = data;
+        // console.log('favorites array:',data);
         return newState;
       });
     })

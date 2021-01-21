@@ -34,6 +34,12 @@ const userController = {
           });
         }
 
+        if (!foundUser) {
+          // if result is null
+          console.log('Unsuccessful login attempt. That account does not exist. DB response:', foundUser);
+          return res.sendStatus(403);
+        }
+
         bcrypt.compare(password, foundUser.password, (error, result) => {
           if (error) {
             console.warn('ERR at bcrypt.compare: ', error);

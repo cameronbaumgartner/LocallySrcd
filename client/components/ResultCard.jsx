@@ -15,9 +15,11 @@ const fullStars = (rating) => {
 };
 
 const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, favorited, unFavorited }) => {
-  const isFav = favorites.includes(storeID);
+  // let isFav = favorites.includes(storeID);
+  // const [FavIcon, setFavIcon] = useState(<img src="../assets/emptyheart.png"></img>);
+  let FavIcon;
   console.log('result card: ', info);
-  console.log('I AM A FAV: ', isFav);
+  console.log('I AM A FAV: ', favorites.includes(storeID));
 
   const {
     display_phone,
@@ -45,8 +47,8 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
     .join(' ');
 
   const handleFavorite = () => {
-    console.log(storeID);
-    if (isFav) unFavorited(storeID);
+    // console.log(storeID);
+    if (favorites.includes(storeID)) unFavorited(storeID);
     else favorited(storeID);
     // isFav = !isFav;
   }
@@ -59,40 +61,20 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
   if (rating % 1 !== 0) {
     displayStars.push(<img src="../assets/halfstar.png"></img>);
   }
-
+    // if (isFav) {
+    //   FavIcon = <img src="../assets/fullheart.png"></img>;
+    // } else {
+    //   FavIcon = <img src="../assets/emptyheart.png"></img>;
+    // }
   // favIcon
-  let FavIcon;
-  if (isFav) {
-    FavIcon = <img src="../assets/fullheart.png"></img>;
-  } else {
-    FavIcon = <img src="../assets/emptyheart.png"></img>;
+  // let FavIcon = <img src="../assets/emptyheart.png"></img>;;
+  if (favorites.includes(storeID)) {
+      FavIcon = <img src="../assets/fullheart.png"></img>;
+    } else {
+      FavIcon = <img src="../assets/emptyheart.png"></img>;
   }
-
   useEffect(() => {
     if (reviewDisplay) {
-      // fetch(`/api/reviews/?storeID=${storeID}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'Application/JSON',
-      //   },
-      // })
-      // .then((data) => data.json())
-      // .then((data) => {
-      //   for(let i = 0; i < data.length; i += 1) {
-      //     tempReviews.push(
-      //       <div className="review" key={storeID,i}>
-      //         <div className="reviewDetails">
-      //           <p>{data[i].username}</p>
-      //           <p>Rating: {data[i].rating}</p>
-      //         </div>
-      //         <div className="reviewBody">
-      //           <p>{data[i].text}</p>
-      //         </div>
-      //       </div>
-      //     );
-      //   }
-      // })
-      // .catch((err) => console.log(err));
       tempReviews.push(
         <div className="review" key="1">
           <div className="reviewDetails">
@@ -121,6 +103,7 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
     }
   }, [reviewDisplay])
   // check if the current store id is equal to the closed store id in state
+ 
   if (id !== closedStoreId) {
     return (
       <div className="resultCardContainer">
@@ -148,7 +131,12 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
             </div>
             <button id='reportClosed' value={id} type='button' onClick={(event) => reportClosed(event, reportClosed)}>Report Closed</button>
             {/* add favorite click listener here */}
-            <div id="favIcon" onClick={() => {console.log('favorited'); handleFavorite()}}>{FavIcon}</div>
+            {/* <div id="favIcon" onClick={() => {
+                isFav ? <img src="../assets/fullheart.png"></img> :
+                        <img src="../assets/emptyheart.png"></img>; handleFavorite()}}>
+            </div> */}
+                        <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}
+            </div>
           </article>
         </div>
         <div id="reviewContainer">
@@ -185,7 +173,10 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
             </div>
            {/* we should consider addidng a another event listener to toggle back to open if status changes */}
              <button id="isclosed">CLOSED</button>
-            <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}</div>
+            {/* <div id="favIcon" onClick={() => {
+                isFav ? <img src="../assets/fullheart.png"></img> :
+                        <img src="../assets/emptyheart.png"></img>; handleFavorite()}}>
+            </div> */}
           </article>
         </div>
         <div>
