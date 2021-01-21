@@ -12,11 +12,8 @@ const userController = {
         favorites: favorites,
       },
       (err, newUser) => {
-        if (err)
-          return next({
-            log: 'Error user already exists',
-            message: err,
-          });
+        if (err) res.sendStatus(409);
+
         const { username, favorites } = newUser;
         res.locals.userID = newUser._id.toString();
         res.locals.username = username;
@@ -57,7 +54,7 @@ const userController = {
 
           // else if result is null (?)
           console.log('Unsuccessful login attempt. Result of bycrpt.compare: ', result);
-          return res.status(418).send('Permission denied');
+          return res.sendStatus(403);
         });
       }
     );
