@@ -15,12 +15,11 @@ const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, c
     recs = null;
   } else {
     results.forEach(
+      // build business results array using returned data from Yelp api
       (rec, i) => {
         const { id } = rec;
         forMap.push(rec.coordinates)
 
-        // checking if store is one of the user's favs
-        //favorites[id] ? isFav = true : isFav = false;
         recs.push(
           <ResultCard
             closedStoreId={closedStoreId}
@@ -36,7 +35,6 @@ const ResultsContainer = ({ results, favorites, closedLocations, reportClosed, c
           />
         );
       }
-      // }
     );
     mapToMap(forMap);
   }

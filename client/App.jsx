@@ -77,6 +77,7 @@ class App extends Component {
       .catch((err) => console.log('ERROR at categoryButtonHandler POST:', err));
   }
 
+  // get list of favorited businesses to display is user dropdown
   favListHandler() {
     // send list of storeID's to get favorites?
     fetch('/api', {
@@ -92,7 +93,6 @@ class App extends Component {
     })
       .then((data) => data.json())
       .then((data) => {
-        // console.log('data back from category ', data)
         this.setState((prevState) => {
           const newState = { ...prevState };
           newState.favResults = data.results;
@@ -103,6 +103,7 @@ class App extends Component {
       .catch((err) => console.log('ERROR at favListHandler POST:', err));
   }
 
+  // send captured search term to Yelp api for search results
   searchButtonHandler(term) {
     fetch('/api', {
       method: 'POST',
@@ -158,7 +159,7 @@ class App extends Component {
           newState.isLoggedIn = true;
           newState.favorites = data.favorites;
           return newState;
-        }, this.updateFavorites());
+        }, this.updateFavorites()); // call updateFavorites to update favorites list upon successful login
       })
       .catch((err) => console.log('ERROR at logInSubmitHandler POST:', err));
   }
@@ -180,7 +181,7 @@ class App extends Component {
     });
   }
  
-  // does this do anything?
+  // displays signup menu
   signUpButtonHandler() {
     this.setState((prevState) => {
       const newState = { ...prevState };
@@ -256,8 +257,8 @@ class App extends Component {
       .catch((err) => console.log('ERROR at reportClosed POST:', err));
   }
 
+  // event handler used to favorite a business
   favorited(storeID) {
-    // console.log('Adding fav to storeID:', storeID);
     fetch('/favs', {
       method: 'POST',
       headers: {
@@ -278,8 +279,8 @@ class App extends Component {
     .catch((err) => console.log('ERROR at favorited POST:', err));
   }
 
+  // event handler used to remove a favorite business
   unFavorited(storeID) {
-    // console.log('Removing fav from storeID:', storeID);
     fetch('/favs', {
       method: 'DELETE',
       headers: {
@@ -300,7 +301,7 @@ class App extends Component {
     .catch((err) => console.log('ERROR at unFavorited DELETE:', err));
   }
 
-  // get this user's favs list on a successful login or page load
+  // update current user's favorites list
   updateFavorites() {
     fetch('/favs', {
       method: 'GET',
@@ -313,7 +314,6 @@ class App extends Component {
       this.setState((prevState) => {
         const newState = { ...prevState };
         newState.favorites = data;
-        // console.log('favorites array:',data);
         return newState;
       });
     })

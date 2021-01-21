@@ -58,12 +58,12 @@ mainController.getUsernames = (res, reviews) => {
     const clone = Object.assign(reviews[i]);
 
     promises.push(
-      User.findById(clone.userID, (err, user) => {
+      User.findById(clone.userID, (err, user, next) => {
         if (err) {
           console.warn('ERROR at getReviews forEach: ', err);
           return next(err);
         }
-        
+
         if (user) {
           // console.log('Found user: ', user.username);
           clone.username = user.username;
@@ -76,20 +76,31 @@ mainController.getUsernames = (res, reviews) => {
       }).exec()
     );
   }
-  return Promise.allSettled(promises);
+  return Promise.all(promises);
 };
+
+/*
+mainController.usernamesDummy = (res, reviews) => {
+  console.log('Trying to get usernames');
+  return reviews.map(review => { 
+    review.username = 'Dummy user';
+    return review;
+  });
+};
+*/
 
 // reviews and ratings
 mainController.getReviews = (req, res, next) => {
   const { storeID } = req.query;
-  console.log('Getting reviews for storeID ', storeID);
-
-  Review.find({ storeID }, (err, reviews) => {
-    if(err) {
+    Review.find({ storeID }, (err, reviews) => {
+    if (err) {
       console.warn('ERROR at getReviews: ', err);
       return next(err);
     }
-    
+
+    console.log('Reviews for storeID ', storeID, reviews);
+
+    if (!reviews.length) return next();
     mainController.getUsernames(res, reviews).then(() => {
       return next();
     });
@@ -99,7 +110,7 @@ mainController.getReviews = (req, res, next) => {
 mainController.addReview = (req, res, next) => {
   const { storeID } = req.query;
   const { text, rating } = req.body;
-  const userID = req.cookies.SSID;
+  const userID = req.cookies.ssid || '60074aa51868f461b0b91e1d';
   console.log('Adding review to storeID ', storeID, ': ', text);
 
   Review.create({ userID, storeID, text, rating }, (err, doc) => {

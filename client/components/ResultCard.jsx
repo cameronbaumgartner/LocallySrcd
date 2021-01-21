@@ -6,20 +6,16 @@ const metersToMiles = (meters) => {
 
 const fullStars = (rating) => {
   const total = [];
-  let count = Math.floor(rating);
-  while (count > 0) {
+  let fullCount = Math.floor(rating);
+  while (fullCount > 0) {
     total.push(<img src="../assets/fullstar.png"></img>);
-    count--;
+    fullCount--;
   }
   return total;
 };
 
 const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, favorited, unFavorited }) => {
-  // let isFav = favorites.includes(storeID);
-  // const [FavIcon, setFavIcon] = useState(<img src="../assets/emptyheart.png"></img>);
   let FavIcon;
-  console.log('result card: ', info);
-  console.log('I AM A FAV: ', favorites.includes(storeID));
 
   const {
     display_phone,
@@ -33,11 +29,17 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
     distance,
     id,
   } = info;
+
   // concatenating the address to display
   let restAddress = location.display_address.join(', ');
   const [reviewDisplay, setReviewDisplay] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [reviewText, setReviewText] = useState('');
+  const [newRating, setNewRating] = useState(5);
+
+  // submission form should be first element in reviews array
   let tempReviews = [];
+  tempReviews.push();
 
   const displayCategories = categories
     .map((obj) => {
@@ -45,6 +47,64 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
       return obj.title;
     })
     .join(' ');
+
+  // TODO: clickable star buttons
+  // const starBtns = [];
+  // let i = 1;
+  // while (i <= 5) {
+  //   <button key={`${i} Stars @ ${storeID}`} value={i} onClick={(event) => {
+  //     setNewRating(event.target.value);
+  //   }}>
+  //     <img src="../assets/fullstar.png"></img>
+  //   </button>
+  // }
+
+  const displayForm = (reviewDisplay) => {
+    return reviewDisplay ? 
+      <form className="newReviewForm" onSubmit={(event) => {
+        submitReview(reviewText, newRating);
+        event.preventDefault();
+      }}>
+        <select className="rating-dropdown" 
+                defaultValue={5} 
+                onChange={(event) => setNewRating(event.target.value)} 
+                required>
+          <option value={1}>1 Star</option>
+          <option value={2}>2 Stars</option>
+          <option value={3}>3 Stars</option>
+          <option value={4}>4 Stars</option>
+          <option value={5}>5 Stars</option>
+        </select>
+        <textarea value={reviewText} 
+                  placeholder="Say something nice..." 
+                  onChange={(event) => setReviewText(event.target.value)} required></textarea>
+        <input type="submit"></input>
+      </form> :
+      '';
+  }
+
+  // form submission handler
+  const submitReview = (text, rating) => {
+    if (!text || !rating) return;
+    console.log('Submitting', rating, '-star review for store ', storeID, ': ', text);
+    const endpoint = '/api/reviews/?storeID=' + storeID;
+    console.log('endpoint', endpoint);
+    fetch(endpoint,
+     {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/JSON',
+      },
+      body: JSON.stringify({
+        text,
+        rating
+      })
+    }).then((res) => res.json())
+    .then((data) => { 
+      setReviewText('');
+      setNewRating(1);
+    }).catch(err => console.warn('ERROR at submitReview POST: ', err));
+  };
 
   const handleFavorite = () => {
     // console.log(storeID);
@@ -74,30 +134,55 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
       FavIcon = <img src="../assets/emptyheart.png"></img>;
   }
   useEffect(() => {
+    // send get request to database when Reviews label is clicked to get reviews array
     if (reviewDisplay) {
-      tempReviews.push(
-        <div className="review" key="1">
-          <div className="reviewDetails">
-            <p>Sam P</p>
-            <p>Rating: 5/5</p>
-          </div>
-          <div className="reviewBody">
-            <p>100% would again</p>
-          </div>
-        </div>
-      );
-      tempReviews.push(
-        <div className="review" key="1">
-          <div className="reviewDetails">
-            <p>Cam B</p>
-            <p>Rating: 5/5</p>
-          </div>
-          <div className="reviewBody">
-            <p>100% would again</p>
-          </div>
-        </div>
-      );
-      setReviews(tempReviews);
+      fetch(`/api/reviews/?storeID=${storeID}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'Application/JSON',
+        },
+      })
+      .then((data) => data.json())
+      .then((data) => {
+        for(let i = 0; i < data.length; i += 1) {
+          tempReviews.push(
+            <div className="review" key={`Store${storeID}Review${i}`}>
+              <div className="reviewDetails">
+                <p>{data[i].username}</p>
+                <p>Rating: {data[i].rating}/5</p>
+              </div>
+              <div className="reviewBody">
+                <p>{data[i].text}</p>
+              </div>
+            </div>
+          );
+        }
+      })
+      .catch((err) => console.log(err));
+    // if (reviewDisplay) {
+    //   tempReviews.push(
+    //     <div className="review" key="1">
+    //       <div className="reviewDetails">
+    //         <p>Sam P</p>
+    //         <p>Rating: 5/5</p>
+    //       </div>
+    //       <div className="reviewBody">
+    //         <p>100% would again</p>
+    //       </div>
+    //     </div>
+    //   );
+    //   tempReviews.push(
+    //     <div className="review" key="2">
+    //       <div className="reviewDetails">
+    //         <p>Cam B</p>
+    //         <p>Rating: 5/5</p>
+    //       </div>
+    //       <div className="reviewBody">
+    //         <p>Meh</p>
+    //       </div>
+    //     </div>
+    //   );
+    //   setReviews(tempReviews);
     } else {
       setReviews([]);
     }
@@ -139,8 +224,9 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
             </div>
           </article>
         </div>
-        <div id="reviewContainer">
-          <span onClick={() => {setReviewDisplay(reviewDisplay ? false : true)}}>Reviews ▼</span>
+        <div className="reviewContainer">
+          <span className="reviewLabel" onClick={() => {setReviewDisplay(reviewDisplay ? false : true)}}>Do you recommend this business? ▼</span>
+          { displayForm(reviewDisplay) }
           {reviews}
         </div>
       </div>
