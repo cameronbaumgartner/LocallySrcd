@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 const cors = require('cors');
 const PORT = 3000;
@@ -17,6 +18,7 @@ app.use(cors(corsOptions));
 const apiRouter = require('./routes/api.js');
 const signupRouter = require('./routes/signup.js');
 const loginRouter = require('./routes/login.js');
+const logoutRouter = require('./routes/logout.js');
 const favRouter = require('./routes/favs.js');
 
 const MongoURI =
@@ -29,6 +31,7 @@ mongoose.connection.once('open', () => {
 
 // parsing any JSON body we get first
 app.use(express.json());
+app.use(cookieParser());
 
 // flow check -> quick check what requests we get from the client instead of checking the Network Tab in Chrome DevTools
 app.use((req, res, next) => {
@@ -44,6 +47,7 @@ app.use((req, res, next) => {
 app.use('/api', apiRouter);
 app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 app.use('/favs', favRouter);
 
 /*** MAIN PAGE ***/

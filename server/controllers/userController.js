@@ -14,6 +14,7 @@ const userController = {
             message: err,
           });
         const { username, favorites } = newUser;
+        res.locals.userID = newUser._id.toString();
         res.locals.username = username;
         res.locals.favorites = favorites;
         console.log('res.locals.user -->', res.locals);
@@ -43,6 +44,7 @@ const userController = {
           if (result) {
             res.locals.username = foundUser.username;
             res.locals.favorites = foundUser.favorites;
+            res.locals.userID = foundUser._id.toString();
             return next();
           }
 
