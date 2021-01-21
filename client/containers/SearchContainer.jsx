@@ -13,8 +13,8 @@ const SearchContainer = ({ searchButtonHandler }) => {
   const searchInputHandler = () => {
     let userKeywordInput = document.getElementById('searchInput').value;
     if (userKeywordInput) {
-      userKeywordInput = '';
       searchButtonHandler(userKeywordInput);
+      userKeywordInput = '';
     }
   }
 
