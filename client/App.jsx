@@ -13,7 +13,7 @@ class App extends Component {
       user: '', // will reassigned as the user object sent back from server after client signs up/logins // 'username'
       isLoggedIn: false,
       userID: '', // will be replaced by sessions
-      favorites: ['4Do8Sfex1EvWES2jpa1VCA', 'RfxOtJ4SQmEeVX_XjFLWUQ'], // favorites: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
+      favorites: [], // favorites: object with keys as the placeIDs and values of true; -> will be created when client receive user info after user logins
       closedLocations: null, // closed locations: object with keys as the placeIDs and values of true; -> will be created when client receives results back from fetch request
       fetchTerm: '',
       signUpPop: false,
@@ -33,6 +33,7 @@ class App extends Component {
     this.reportClosed = this.reportClosed.bind(this);
     this.favorited = this.favorited.bind(this);
     this.unFavorited = this.unFavorited.bind(this);
+    this.favListHandler = this.favListHandler.bind(this);
   }
 
   updateUserCoordinates(latitude, longitude) {
@@ -77,6 +78,32 @@ class App extends Component {
       .catch((err) => console.log(err));
   }
 
+  favListHandler() {
+    // send list of storeID's to get favorites?
+    fetch('/api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/JSON',
+      },
+      body: JSON.stringify({
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        term: 'restaurants',
+      }),
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        console.log('data back from category ', data)
+        this.setState((prevState) => {
+          const newState = { ...prevState };
+          newState.favResults = data.results;
+          newState.closedLocations = data.closedLocations;
+          return newState;
+        });
+      })
+      .catch((err) => console.log(err));
+  }
+
   searchButtonHandler(term) {
     fetch('/api', {
       method: 'POST',
@@ -93,9 +120,8 @@ class App extends Component {
       .then((data) => {
         this.setState((prevState) => {
           const newState = { ...prevState };
-          console.log('api data:', data);
           newState.results = data.results;
-          newState.closedLocations = data.closedLocations;
+          newState.closedStoreList = data.closedStoreList;
           newState.fetchTerm = data.term;
           return newState;
         });
@@ -322,11 +348,15 @@ class App extends Component {
           <NavBar 
             userName={this.state.user} 
             signUpPop={this.state.signUpPop}
-            userStatus={this.state.isLoggedIn} 
+            userStatus={this.state.isLoggedIn}
+            favorites={this.state.favorites}
+            favResults={this.state.favResults}
+            closedLocations={this.state.closedLocations}
             logInSubmitHandler={this.logInSubmitHandler} 
             logoutHandler={this.logoutHandler} 
             signUpButtonHandler={this.signUpButtonHandler}
             createUser={this.createUser}
+            favListHandler= {this.favListHandler}
             />
         </div>
 

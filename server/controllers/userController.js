@@ -1,16 +1,12 @@
-const bcrypt = require('bcrypt'); // 🧟‍♂️ 🧟‍♀️
+const bcrypt = require('bcrypt'); 
 const User = require('../models/userModel');
 
 // create the user
 const userController = {
   createUser(req, res, next) {
-    const { username, password, favorites } = req.body;
+    const { username, password } = req.body;
 
-    User.create(
-      {
-        username: username,
-        favorites: favorites,
-      },
+    User.create({ username, password },
       (err, newUser) => {
         if (err) res.sendStatus(409);
 
@@ -29,10 +25,7 @@ const userController = {
     console.log('in getUser', req.body);
     const { username, password } = req.body;
 
-    User.findOne(
-      {
-        username: username,
-      },
+    User.findOne({ username },
       (err, foundUser) => {
         if (err)
           return next({
@@ -63,9 +56,7 @@ const userController = {
 
   // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
-    // temporary sample user, change
-    const userID = '60074ab9707e6f29cecd1487';
-    // const userID = req.cookies.userID;   //  TODO
+    const userID = req.cookies.SSID;
 
     User.findOne({ _id: userID }, (err, user) => {
       if (err) {
@@ -108,8 +99,7 @@ const userController = {
 
   // update user record with the modified array
   updateFavorites(req, res, next) {
-    // temporary sample user, change
-    const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.userID
+    const userID = req.cookies.SSID;
     const favorites = res.locals.favorites; 
 
     User.findOneAndUpdate(

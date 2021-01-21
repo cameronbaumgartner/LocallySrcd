@@ -2,13 +2,14 @@
   border: 1px solid rgb(211, 211, 211);
   border-radius: 20px;
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   width: 650px;
-  height: 210px;
+  // height: 210px;
   padding: 24px;
   margin: 70px 24px;
   background-color: white;
   font-family: Arial;
+  flex-direction: row;
 }
 
 .placeCard {
@@ -61,7 +62,7 @@
 
   }
 
-  #reviews {
+  #reviewCount {
     grid-area: reviews;
     text-align: center;
     color: grey;
@@ -158,4 +159,47 @@
 #reportClosed:focus {
   outline: none;
   text-decoration: underline;
+}
+
+#reviewContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-height: 350px;
+}
+
+.review {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+.reviewDetails {
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+  border-right: 1px solid rgb(211, 211, 211);
+  font-size: 12px;
+}
+
+.reviewDetails p {
+  font-family: "Arial";
+  font-size: 14px;
+  color: black;
+  text-align: left;
+  padding: 0px 18px;
+}
+
+.reviewBody {
+  display: flex;
+  flex-grow: 8;
+  padding: 0px 10px;
+}
+
+.reviewBody p {
+  font-family: "Arial";
+  font-size: 14px;
+  color: black;
 }

@@ -4,12 +4,27 @@ import APIKey from '../secrets.js'
 import React from 'react'
 import GoogleMapReact from 'google-map-react'
 import '../stylesheet/map.scss'
-import marker from '../assets/marker-icon.png';
+import marker from '../assets/thickpin.png';
 import { Icon } from '@iconify/react'
+
+const locationArray = [];
+
+const mapToMap = (resArray) => {
+  for(let i = 0; i < resArray.length; i ++){
+    console.log('in map to map:',resArray[i]);
+    locationArray.push(
+      <LocationPin
+        lat={resArray[i].lat}
+        lng={resArray[i].lng}
+        text={resArray[i].address}
+      />
+    )
+  }
+}
 
 const LocationPin = ({ text }) => (
   <div className="pin">
-    <Icon icon={marker} className="pin-icon" />
+    <Icon icon={<img src='./assets/thickpin.png'/>} className="pin-icon" />
     <p className="pin-text">{text}</p>
   </div>
 )
@@ -27,9 +42,10 @@ const Map = ({ location, zoomLevel }) => (
         lng={location.lng}
         text={location.address}
       />
+      {locationArray}
       </GoogleMapReact>
     </div>
   </div>
 )
 
-export default Map;
+export { Map, mapToMap };
