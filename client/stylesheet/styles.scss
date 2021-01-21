@@ -157,6 +157,26 @@ a {
     margin-top: 1.1em;
   }
 
+  #signuplogbtn {
+    font-family: 'Fredoka One';
+    color: $main-grey;
+    margin-left: 1em;
+    height: 3em;
+    width: 18em;
+    border-radius: 24px;
+    margin-top: 1.1em;
+  }
+
+  #signuplogbtn:focus{
+    outline: none;
+  }
+
+  #signuplogbtn:hover {
+    background-color: lighten($main-grey, 50%);
+    color: white;
+    cursor: pointer;
+  }
+
   #signupformbtn:focus{
     outline: none;
   }
