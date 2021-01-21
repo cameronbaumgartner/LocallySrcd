@@ -59,9 +59,7 @@ const userController = {
 
   // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
-    // temporary sample user, change
-    const userID = '60074ab9707e6f29cecd1487';
-    // const userID = req.cookies.userID;   //  TODO
+    const userID = req.cookies.SSID;
 
     User.findOne({ _id: userID }, (err, user) => {
       if (err) {
@@ -104,8 +102,7 @@ const userController = {
 
   // update user record with the modified array
   updateFavorites(req, res, next) {
-    // temporary sample user, change
-    const userID = '60074ab9707e6f29cecd1487';  // TODO: replace with req.cookies.userID
+    const userID = req.cookies.SSID;
     const favorites = res.locals.favorites; 
 
     User.findOneAndUpdate(

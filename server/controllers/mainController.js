@@ -7,7 +7,6 @@ const { ClosedStore, Review } = require('../models/storeModel.js');
 const User = require('../models/userModel');
 
 const mainController = {};
-const userID = '60074aa51868f461b0b91e1d';  // TODO: replace with req.cookies.SSID
 
 // get stores by search term
 mainController.getResults = (req, res, next) => {
@@ -85,7 +84,6 @@ mainController.getUsernames = (res, reviews) => {
   return Promise.allSettled(promises);
 };
 
-
 // reviews and ratings
 mainController.getReviews = (req, res, next) => {
   const { storeID } = req.query;
@@ -106,6 +104,7 @@ mainController.getReviews = (req, res, next) => {
 mainController.addReview = (req, res, next) => {
   const { storeID } = req.query;
   const { text, rating } = req.body;
+  const userID = req.cookies.SSID;
   console.log('Adding review to storeID ', storeID, ': ', text);
 
   Review.create({ userID, storeID, text, rating }, (err, doc) => {
