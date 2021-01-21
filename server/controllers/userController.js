@@ -22,8 +22,8 @@ const userController = {
 
   // authenticate user by checking if they are in the database
   getUser(req, res, next) {
-    console.log('in getUser', req.body);
     const { username, password } = req.body;
+    console.log('Logging in user', username);
 
     User.findOne({ username },
       (err, foundUser) => {
@@ -56,7 +56,7 @@ const userController = {
 
   // query db for this user's array of favorite stores; store on res.locals
   getFavorites(req, res, next) {
-    const userID = req.cookies.SSID;
+    const userID = req.cookies.ssid;
 
     User.findOne({ _id: userID }, (err, user) => {
       if (err) {
@@ -64,7 +64,12 @@ const userController = {
         return next(err);
       }
 
-      res.locals.favorites = user.favorites;
+      try {
+        res.locals.favorites = user.favorites;
+      }
+      catch (error) {
+        console.warn('Error adding user #', userID, '\'s favorites to the response object: ', error);
+      }
       return next();
     });
   },
@@ -99,7 +104,7 @@ const userController = {
 
   // update user record with the modified array
   updateFavorites(req, res, next) {
-    const userID = req.cookies.SSID;
+    const userID = req.cookies.ssid;
     const favorites = res.locals.favorites; 
 
     User.findOneAndUpdate(
