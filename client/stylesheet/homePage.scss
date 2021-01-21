@@ -43,7 +43,6 @@
   color: darken(rgb(104, 99, 99), 20%);
 }
 
-
 .TopCateBox {
   display: inline-flex;
   justify-content: space-around;
@@ -79,3 +78,15 @@
   outline:none;
 }
 
+#userDropContainer {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  position: absolute;
+  top: 50px;
+  right: 0px;
+}
+
+#userLocation {
+  margin-bottom: 6px;
+}
