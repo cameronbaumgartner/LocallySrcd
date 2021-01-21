@@ -8,18 +8,9 @@ const userController = {
 
     User.create({ username, password },
       (err, newUser) => {
-<<<<<<< HEAD
-        if (err) res.sendStatus(409);
+        if (err) return res.sendStatus(409);
 
         const { username, favorites } = newUser;
-=======
-        if (err) {
-          return next({
-            log: 'Error user already exists',
-            message: err,
-          });
-        }
->>>>>>> adac8d168865af0a672e3aa1c60b08839b045c68
         res.locals.userID = newUser._id.toString();
         res.locals.username = newUser.username;
         res.locals.favorites = newUser.favorites;
@@ -51,7 +42,7 @@ const userController = {
           if (!result) {
             // if result is null
             console.log('Unsuccessful login attempt. Result of bycrpt.compare: ', result);
-            return return res.sendStatus(403);
+            return res.sendStatus(403);
           }
 
           res.locals.username = foundUser.username;
