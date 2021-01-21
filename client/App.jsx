@@ -143,6 +143,14 @@ class App extends Component {
         password: password,
       }),
     })
+      .then(response => {
+        if (response.ok) return response;
+        
+        if (response.status === 403) {
+          alert('Incorrect username or password.');
+        }
+        throw Error(response.statusText);
+      })
       .then((data) => data.json())
       .then((data) => {
         this.setState((prevState) => {
@@ -195,8 +203,20 @@ class App extends Component {
         password: password,
       }),
     })
-    .then((data) => data.json())
+    .then(response => {
+      if (response.ok) return response;
+      
+      if (response.status === 409) {
+        alert('Username already exists. Please try again');
+      }
+      throw Error(response.statusText);
+    })
     .then((data) => {
+      console.log(data);
+      return data.json()
+    })
+    .then((data) => {
+      console.log(data);
       this.setState((prevState) => {
         const newState = { ...prevState };
         newState.user = data.username
