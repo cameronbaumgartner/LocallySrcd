@@ -3,13 +3,20 @@
   border-radius: 20px;
   display: flex;
   flex-wrap: wrap;
-  width: 650px;
+  width: 660px;
   // height: 210px;
   padding: 24px;
   margin: 40px 24px;
   background-color: white;
   font-family: Arial;
   flex-direction: row;
+  // overflow-y: auto;
+}
+
+.reviewContainer {
+  overflow-y: auto;
+  max-width: 650px;
+  padding: 10px;
 }
 
 .placeCard {
