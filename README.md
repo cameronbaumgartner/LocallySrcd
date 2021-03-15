@@ -1,7 +1,9 @@
-<center>
-  <img src="client/assets/locallysrcdlogo.png" alt="logo"/>
-  <p>Small business listings and reviews.</p>
-</center>
+<header>
+  <p align="center">
+    <img src="client/assets/locallysrcdlogo.png" alt="logo"/>
+    <br/>Small business listings and reviews.
+  </p>
+</header>
 
 <main style="margin-top:30px">
   <h1>About</h1>
