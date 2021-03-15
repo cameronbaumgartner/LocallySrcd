@@ -17,8 +17,8 @@ class App extends Component {
       fetchTerm: '',
       signUpPop: false,
       closedStoreId: null,
-      longitude: 40.700655, // default; will be supplied from db after component mounts
-      latitude: -73.94772689999999 // default
+      longitude: -74.005821, // default; will be supplied from db after component mounts
+      latitude: 40.719200 // default
       // results: an array of objects // will be created when server sends back retrieved list of results - this should be update whenever keyword or category is submitted by user
     };
 

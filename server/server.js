@@ -10,21 +10,19 @@ const mongoose = require('mongoose');
 
 // allow cross-origin requests
 const corsOptions = {
-  origin: "http://localhost:8080"   // or should this be 3000?
+  origin: "http://localhost:8080"
 };
 app.use(cors(corsOptions));
 
-// requiring routers here
 const apiRouter = require('./routes/api.js');
 const signupRouter = require('./routes/signup.js');
 const loginRouter = require('./routes/login.js');
 const logoutRouter = require('./routes/logout.js');
 const favRouter = require('./routes/favs.js');
 
-const MongoURI =
-  'mongodb+srv://cameronhbg:rGBxRb6Wm7gPkImZ@cluster0.i6kz1.mongodb.net/LocallySRCD?retryWrites=true&w=majority';
+const {DB_URI} = require('./secrets.js');
 
-mongoose.connect(MongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
   console.log('connected to DB');
 });

@@ -1,8 +1,6 @@
-const path = require('path');
 const yelp = require('yelp-fusion');
-const client = yelp.client(
-  'C875dNRjWAzLaQgmC7nd_wO97JFWpg6PuDdI9mfVsru_cOTvyoouijdnEAQwW2rnVUJ5lELwswChXgQaOJpSNpLK4tK6Jr_Gi1xRtp3dWA2UZT7B7xYP5zDBmEYDYHYx'
-);
+const {YELP_KEY} = require('../secrets.js');
+const client = yelp.client(YELP_KEY);
 const { ClosedStore, Review } = require('../models/storeModel.js');
 const User = require('../models/userModel');
 
@@ -21,23 +19,28 @@ mainController.getResults = (req, res, next) => {
     .then((response) => {
       let mappedResults = [];
       let index = 0;
-      while (mappedResults.length < 10) {
-        const biz = response.jsonBody.businesses[index];
-        // if this business's id is not included on the object listing closed stores, push it to the results array
-        if (!res.locals.closedStoresList[biz.id]) {
-          mappedResults.push(biz);
+      const {businesses} = response.jsonBody;
+
+      while (mappedResults.length < 10 && index < businesses.length) {
+        try {
+          // if this business's id is not included on the object listing closed stores, push it to the results array
+          const biz = businesses[index];
+          console.log('biz', biz);
+          if (!res.locals.closedStoresList[biz.id]) {
+            //remove unneeded props
+            delete biz.alias;
+            delete biz.is_closed;
+            delete biz.transactions;
+            delete biz.price;
+            mappedResults.push(biz);
+          }
         }
+        catch(error) {
+          console.log('ERROR pushing business into array:', biz, error);
+        }
+        
         index++;
       }
-      // mutate the objects in the array to remove unneeded props
-      mappedResults = mappedResults.map(biz => {
-        delete biz.alias;
-        delete biz.is_closed;
-        delete biz.transactions;
-        delete biz.price;
-
-        return biz;
-      });
 
       res.locals.results = mappedResults;
       // send back term too
@@ -45,7 +48,7 @@ mainController.getResults = (req, res, next) => {
       return next();
     })
     .catch((e) => {
-      console.log(e);
+      console.log('ERROR at getResults:', e);
     });
 };
 
@@ -78,16 +81,6 @@ mainController.getUsernames = (res, reviews) => {
   }
   return Promise.all(promises);
 };
-
-/*
-mainController.usernamesDummy = (res, reviews) => {
-  console.log('Trying to get usernames');
-  return reviews.map(review => { 
-    review.username = 'Dummy user';
-    return review;
-  });
-};
-*/
 
 // reviews and ratings
 mainController.getReviews = (req, res, next) => {

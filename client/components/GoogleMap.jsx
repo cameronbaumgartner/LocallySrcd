@@ -1,5 +1,4 @@
-import APIKey from '../secrets.js'
-
+import {APIKey} from '../../server/secrets.js'
 import React from 'react'
 import GoogleMapReact from 'google-map-react'
 import '../stylesheet/map.scss'

@@ -36,30 +36,7 @@ const reviewSchema = new Schema({
 
 const Review = mongoose.model('review', reviewSchema);
 
-/*
-const ratingSchema = new Schema({
-  user_id: {
-    type: Schema.Types.ObjectId,
-    refs: 'user',
-    required: true,
-  },
-  storeID: {        // non-unique
-    type: String,
-    required: true,
-  },
-  rating: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 5,
-  }
-});
-
-const Rating = mongoose.model('rating', ratingSchema);
-*/
-
 module.exports = {
   ClosedStore,
   Review,
-  // Rating
 };

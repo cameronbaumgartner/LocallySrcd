@@ -19,7 +19,7 @@ const Home = (props) => {
   return (
     <div className='homeContainer'>
       <p> Amplify your support. Shop locally! </p>
-      <Map location={location} zoomLevel={17}/>
+      {/* <Map location={location} zoomLevel={17}/> */}
       <SearchContainer searchButtonHandler={searchButtonHandler} />
       <TopCategoriesContainer catBtnHandler={catBtnHandler} />
       <ResultsContainer
