@@ -1,5 +1,5 @@
 #secrets
-client/secrets.js
+server/secrets.js
 
 #deprecated map version
 containers/MapContainer.jsx
