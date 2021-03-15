@@ -17,4 +17,6 @@
 </main>
 
 <h1 style="margin-top:30px">Preview</h1>
-<img src="client/assets/locally-srcd-screengrab.gif" alt="screen recording" />
+ <p align="center">
+  <img src="client/assets/locally-srcd-screengrab.gif" alt="screen recording" />
+ </p>
