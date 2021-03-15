@@ -38,9 +38,6 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
   const [newRating, setNewRating] = useState(5);
   const [fetched, setFetched] = useState(false);
 
-  // submission form should be first element in reviews array
-  let tempReviews = [];
-  tempReviews.push();
 
   const displayCategories = categories
     .map((obj) => {
@@ -49,16 +46,6 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
     })
     .join(' ');
 
-  // TODO: clickable star buttons
-  // const starBtns = [];
-  // let i = 1;
-  // while (i <= 5) {
-  //   <button key={`${i} Stars @ ${storeID}`} value={i} onClick={(event) => {
-  //     setNewRating(event.target.value);
-  //   }}>
-  //     <img src="../assets/fullstar.png"></img>
-  //   </button>
-  // }
 
   const displayForm = (reviewDisplay) => {
     return reviewDisplay ? 
@@ -142,18 +129,13 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
   if (rating % 1 !== 0) {
     displayStars.push(<img src="../assets/halfstar.png"></img>);
   }
-    // if (isFav) {
-    //   FavIcon = <img src="../assets/fullheart.png"></img>;
-    // } else {
-    //   FavIcon = <img src="../assets/emptyheart.png"></img>;
-    // }
-  // favIcon
-  // let FavIcon = <img src="../assets/emptyheart.png"></img>;;
+
   if (favorites.includes(storeID)) {
       FavIcon = <img src="../assets/fullheart.png"></img>;
     } else {
       FavIcon = <img src="../assets/emptyheart.png"></img>;
   }
+
   useEffect(() => {
     // send get request to database when Reviews label is clicked to get reviews array
     fetch(`/api/reviews/?storeID=${storeID}`, {
@@ -165,12 +147,12 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
     .then((data) => data.json())
     .then((data) => {
       for(let i = 0; i < data.length; i += 1) {
-        console.log('reviewbody:', data[i].text);
+        // console.log('reviewbody:', data[i].text);
         setReviews(data);
       }
     })
     .catch((err) => console.log(err));
-    setReviews(tempReviews);
+
   }, [reviewDisplay, fetched])
 
 
@@ -201,12 +183,7 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
               <span id="reviewCount"> {review_count}</span>
             </div>
             <button id='reportClosed' value={id} type='button' onClick={(event) => reportClosed(event, reportClosed)}>Report Closed</button>
-            {/* add favorite click listener here */}
-            {/* <div id="favIcon" onClick={() => {
-                isFav ? <img src="../assets/fullheart.png"></img> :
-                        <img src="../assets/emptyheart.png"></img>; handleFavorite()}}>
-            </div> */}
-                        <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}
+              <div id="favIcon" onClick={() => handleFavorite()}>{FavIcon}
             </div>
           </article>
         </div>
@@ -245,10 +222,6 @@ const ResultCard = ({ info, favorites, reportClosed, closedStoreId, storeID, fav
             </div>
            {/* we should consider addidng a another event listener to toggle back to open if status changes */}
              <button id="isclosed">CLOSED</button>
-            {/* <div id="favIcon" onClick={() => {
-                isFav ? <img src="../assets/fullheart.png"></img> :
-                        <img src="../assets/emptyheart.png"></img>; handleFavorite()}}>
-            </div> */}
           </article>
         </div>
         <div>

@@ -1,6 +1,5 @@
 import APIKey from '../secrets.js'
 
-// 'AIzaSyCDy4afmx8jFL41P2ARsimuul3fk_VdSZk'
 import React from 'react'
 import GoogleMapReact from 'google-map-react'
 import '../stylesheet/map.scss'
